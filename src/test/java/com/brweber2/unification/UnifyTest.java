@@ -129,4 +129,52 @@ public class UnifyTest {
         Assert.assertTrue( result.getScope().containsKey(y));
         Assert.assertTrue( result.getScope().get(y).equals(numeric1));
     }
+
+    @Test
+    public void unifyComplexTermsDifferentFunctor()
+    {
+        Variable x = new Variable("x");
+        Variable y = new Variable("y");
+        Atom atom1 = new Atom("baz");
+        Numeric numeric1 = new Numeric("10");
+
+        ComplexTerm complexTerm1 = new ComplexTerm("foo",2, atom1, y);
+        ComplexTerm complexTerm2 = new ComplexTerm("bar",2, x, numeric1 );
+
+        Unify unifier = new Unification();
+        UnificationResult result = unifier.unify(complexTerm1,complexTerm2);
+        Assert.assertTrue( result.getSuccess() == UnificationSuccess.NO );
+    }
+
+    @Test
+    public void unifyComplexTermsDifferentArity()
+    {
+        Variable x = new Variable("x");
+        Variable y = new Variable("y");
+        Atom atom1 = new Atom("baz");
+        Numeric numeric1 = new Numeric("10");
+
+        ComplexTerm complexTerm1 = new ComplexTerm("foo",2, atom1, y);
+        ComplexTerm complexTerm2 = new ComplexTerm("foo",1, numeric1 );
+
+        Unify unifier = new Unification();
+        UnificationResult result = unifier.unify(complexTerm1,complexTerm2);
+        Assert.assertTrue( result.getSuccess() == UnificationSuccess.NO );
+    }
+
+    @Test
+    public void unifyComplexTermsDifferentValues()
+    {
+        Variable x = new Variable("x");
+        Variable y = new Variable("y");
+        Atom atom1 = new Atom("baz");
+        Numeric numeric1 = new Numeric("10");
+
+        ComplexTerm complexTerm1 = new ComplexTerm("foo",2, atom1, y);
+        ComplexTerm complexTerm2 = new ComplexTerm("foo",2, y, numeric1 );
+
+        Unify unifier = new Unification();
+        UnificationResult result = unifier.unify(complexTerm1,complexTerm2);
+        Assert.assertTrue( result.getSuccess() == UnificationSuccess.NO );
+    }
 }
