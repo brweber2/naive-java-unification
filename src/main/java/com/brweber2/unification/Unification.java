@@ -51,10 +51,10 @@ public class Unification implements Unify {
             if ( a.sameFunctor(b) && a.sameArity(b) )
             {
                 // args unify
-                if ( a.argsUnify(this,b) )
+                if ( argsUnify(soFar,a,b) )
                 {
                     // variables are compatible
-                    return new UnificationResult(UnificationSuccess.YES);
+                    return soFar;
                 }
             }
             return new UnificationResult(UnificationSuccess.NO);
@@ -63,5 +63,18 @@ public class Unification implements Unify {
         {
             return new UnificationResult(UnificationSuccess.NO);
         }
+    }
+
+    boolean argsUnify(UnificationResult soFar, ComplexTerm a, ComplexTerm b) {
+        for (int i = 0; i < a.getArity(); i++ ) {
+            UnificationResult match = unify( soFar, a.getTerms().get(i), b.getTerms().get(i));
+            switch (match.getSuccess()) {
+                case YES:
+                    break;
+                case NO:
+                    return false;
+            }
+        }
+        return true;
     }
 }

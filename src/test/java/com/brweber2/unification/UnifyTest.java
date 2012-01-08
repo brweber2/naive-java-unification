@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 /**
  * @author brweber2
- *         Copyright: 2012
+ * Copyright: 2012
  */
 public class UnifyTest {
     @Test
@@ -43,7 +43,7 @@ public class UnifyTest {
     }
     
     @Test
-    public void unifyVariables()
+    public void unifyVariableWithAtom()
     {
         Variable variable1 = new Variable("foo");
         Atom atom1 = new Atom("quux");
@@ -53,5 +53,80 @@ public class UnifyTest {
         Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
         result.print();
         Assert.assertTrue( result.getScope().containsKey(variable1) );
+        Assert.assertTrue( result.getScope().get(variable1).equals(atom1));
+    }
+
+    @Test
+    public void unifyAtomWithVariable()
+    {
+        Variable variable1 = new Variable("foo");
+        Atom atom1 = new Atom("quux");
+
+        Unify unifier = new Unification();
+        UnificationResult result = unifier.unify(atom1,variable1);
+        Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
+        result.print();
+        Assert.assertTrue( result.getScope().containsKey(variable1) );
+        Assert.assertTrue( result.getScope().get(variable1).equals(atom1));
+    }
+
+    @Test
+    public void unifyVariableWithNumeric()
+    {
+        Variable variable1 = new Variable("foo");
+        Numeric numeric1 = new Numeric("2");
+
+        Unify unifier = new Unification();
+        UnificationResult result = unifier.unify(variable1,numeric1);
+        Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
+        result.print();
+        Assert.assertTrue( result.getScope().containsKey(variable1) );
+        Assert.assertTrue( result.getScope().get(variable1).equals(numeric1));
+    }
+
+    @Test
+    public void unifyNumericWithVariable()
+    {
+        Variable variable1 = new Variable("foo");
+        Numeric numeric1 = new Numeric("46531");
+
+        Unify unifier = new Unification();
+        UnificationResult result = unifier.unify(numeric1,variable1);
+        Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
+        result.print();
+        Assert.assertTrue( result.getScope().containsKey(variable1) );
+        Assert.assertTrue( result.getScope().get(variable1).equals(numeric1));
+    }
+    
+    @Test
+    public void unifyAtomWithNumeric()
+    {
+        Atom atom1 = new Atom("foo");
+        Numeric numeric1 = new Numeric("123.45");
+
+        Unify unifier = new Unification();
+        UnificationResult result = unifier.unify(numeric1,atom1);
+        Assert.assertTrue( result.getSuccess() == UnificationSuccess.NO );
+    }
+    
+    @Test
+    public void unifyComplexTerms()
+    {
+        Variable x = new Variable("x");
+        Variable y = new Variable("y");
+        Atom atom1 = new Atom("baz");
+        Numeric numeric1 = new Numeric("10");
+        
+        ComplexTerm complexTerm1 = new ComplexTerm("foo",2, atom1, y);
+        ComplexTerm complexTerm2 = new ComplexTerm("foo",2, x, numeric1 );
+
+        Unify unifier = new Unification();
+        UnificationResult result = unifier.unify(complexTerm1,complexTerm2);
+        Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
+        result.print();
+        Assert.assertTrue( result.getScope().containsKey(x));
+        Assert.assertTrue( result.getScope().get(x).equals(atom1));
+        Assert.assertTrue( result.getScope().containsKey(y));
+        Assert.assertTrue( result.getScope().get(y).equals(numeric1));
     }
 }

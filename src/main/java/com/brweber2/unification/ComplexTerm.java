@@ -31,17 +31,12 @@ public class ComplexTerm implements Term  {
         return this.arity == b.arity;
     }
 
-    boolean argsUnify(Unify unify, ComplexTerm b) {
-        for (int i = 0; i < arity; i++ ) {
-            UnificationResult match = unify.unify( this.terms.get(i), b.terms.get(i));
-            switch (match.getSuccess()) {
-                case YES:
-                    break;
-                case NO:
-                    return false;
-            }
-        }
-        return true;
+    public int getArity() {
+        return arity;
+    }
+
+    public List<Term> getTerms() {
+        return terms;
     }
 
     @Override
