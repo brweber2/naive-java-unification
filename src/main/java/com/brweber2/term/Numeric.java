@@ -21,4 +21,21 @@ public class Numeric implements Term {
     public String prettyPrint() {
         return number;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Numeric numeric = (Numeric) o;
+
+        if (!number.equals(numeric.number)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return number.hashCode();
+    }
 }

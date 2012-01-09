@@ -14,15 +14,18 @@ public class ProofSearch {
 
     private Unify unifier;
     private KnowledgeBase knowledgeBase;
+    private RuleSearch ruleSearch;
 
     public ProofSearch(Unify unifier, KnowledgeBase knowledgeBase) {
         this.unifier = unifier;
         this.knowledgeBase = knowledgeBase;
+        this.ruleSearch = new RuleSearch(unifier,knowledgeBase);
     }
 
     public UnificationResult ask( Term question )
     {
         UnificationResult result = new UnificationResult();
+        UnificationResult baseResult = result;
         for (Term term : knowledgeBase.getTerms()) {
             UnificationResult thisResult = unifier.unify(question, term);
             if ( thisResult.getSuccess() == UnificationSuccess.YES )
@@ -32,14 +35,14 @@ public class ProofSearch {
             }
         }
         for (Rule rule : knowledgeBase.getRules()) {
-            UnificationResult thisResult = unifier.unify( knowledgeBase, question, rule );
+            UnificationResult thisResult = ruleSearch.ask( question, rule );
             if ( thisResult.getSuccess() == UnificationSuccess.YES )
             {
                 result.next(thisResult);
                 result = thisResult;
             }
         }
-        return result;
+        return baseResult.getNext();
     }
 
     public void askAndPrint( Term question )

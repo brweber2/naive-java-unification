@@ -4,6 +4,7 @@ import com.brweber2.term.Term;
 import com.brweber2.term.Variable;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -11,21 +12,14 @@ import java.util.Map;
  *         Copyright: 2012
  */
 public class UnificationScope {
-    private Map<Variable,Term> scope = new HashMap<Variable,Term>();
+    private Map<Variable,Term> scope = new LinkedHashMap<Variable, Term>();
 
     public boolean set(Variable term1, Term value)
     {
         if ( scope.containsKey( term1 ) )
         {
             // todo this should call unify or .equals?
-            if ( scope.get(term1).equals(value) )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return scope.get(term1).equals(value);
         }
         else
         {

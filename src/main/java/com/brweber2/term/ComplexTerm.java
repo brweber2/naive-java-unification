@@ -14,12 +14,16 @@ public class ComplexTerm implements Term  {
     private final int arity;
     private final List<Term> terms = new ArrayList<Term>();
 
-    public ComplexTerm(String functor, int arity, Term ... terms) {
+    public ComplexTerm(String functor, Term ... terms) {
         this.functor = functor;
-        this.arity = arity;
         if ( terms != null )
         {
+            this.arity = terms.length;
             Collections.addAll( this.terms, terms );
+        }
+        else
+        {
+            this.arity = 0;
         }
     }
 
@@ -42,5 +46,27 @@ public class ComplexTerm implements Term  {
     @Override
     public String prettyPrint() {
         throw new RuntimeException("todo");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ComplexTerm that = (ComplexTerm) o;
+
+        if (arity != that.arity) return false;
+        if (!functor.equals(that.functor)) return false;
+        if (!terms.equals(that.terms)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = functor.hashCode();
+        result = 31 * result + arity;
+        result = 31 * result + terms.hashCode();
+        return result;
     }
 }

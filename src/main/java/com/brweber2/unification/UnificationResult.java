@@ -48,6 +48,14 @@ public class UnificationResult {
         return scope.getScope();
     }
 
+    public Term getTerm1() {
+        return term1;
+    }
+
+    public Term getTerm2() {
+        return term2;
+    }
+
     public String toString()
     {
         StringBuilder str = new StringBuilder();

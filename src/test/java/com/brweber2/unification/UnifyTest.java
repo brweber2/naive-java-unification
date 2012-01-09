@@ -121,8 +121,8 @@ public class UnifyTest {
         Atom atom1 = new Atom("baz");
         Numeric numeric1 = new Numeric("10");
         
-        ComplexTerm complexTerm1 = new ComplexTerm("foo",2, atom1, y);
-        ComplexTerm complexTerm2 = new ComplexTerm("foo",2, x, numeric1 );
+        ComplexTerm complexTerm1 = new ComplexTerm("foo", atom1, y);
+        ComplexTerm complexTerm2 = new ComplexTerm("foo", x, numeric1 );
 
         Unify unifier = new Unification();
         UnificationResult result = unifier.unify(complexTerm1,complexTerm2);
@@ -142,8 +142,8 @@ public class UnifyTest {
         Atom atom1 = new Atom("baz");
         Numeric numeric1 = new Numeric("10");
 
-        ComplexTerm complexTerm1 = new ComplexTerm("foo",2, atom1, y);
-        ComplexTerm complexTerm2 = new ComplexTerm("bar",2, x, numeric1 );
+        ComplexTerm complexTerm1 = new ComplexTerm("foo", atom1, y);
+        ComplexTerm complexTerm2 = new ComplexTerm("bar", x, numeric1 );
 
         Unify unifier = new Unification();
         UnificationResult result = unifier.unify(complexTerm1,complexTerm2);
@@ -158,8 +158,8 @@ public class UnifyTest {
         Atom atom1 = new Atom("baz");
         Numeric numeric1 = new Numeric("10");
 
-        ComplexTerm complexTerm1 = new ComplexTerm("foo",2, atom1, y);
-        ComplexTerm complexTerm2 = new ComplexTerm("foo",1, numeric1 );
+        ComplexTerm complexTerm1 = new ComplexTerm("foo", atom1, y);
+        ComplexTerm complexTerm2 = new ComplexTerm("foo", numeric1 );
 
         Unify unifier = new Unification();
         UnificationResult result = unifier.unify(complexTerm1,complexTerm2);
@@ -174,8 +174,8 @@ public class UnifyTest {
         Atom atom1 = new Atom("baz");
         Numeric numeric1 = new Numeric("10");
 
-        ComplexTerm complexTerm1 = new ComplexTerm("foo",2, atom1, y);
-        ComplexTerm complexTerm2 = new ComplexTerm("foo",2, y, numeric1 );
+        ComplexTerm complexTerm1 = new ComplexTerm("foo", atom1, y);
+        ComplexTerm complexTerm2 = new ComplexTerm("foo", y, numeric1 );
 
         Unify unifier = new Unification();
         UnificationResult result = unifier.unify(complexTerm1,complexTerm2);
