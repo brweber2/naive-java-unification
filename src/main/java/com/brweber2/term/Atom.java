@@ -1,10 +1,10 @@
-package com.brweber2.unification;
+package com.brweber2.term;
 
 /**
  * @author brweber2
  * Copyright: 2012
  */
-public class Atom implements Constant<Atom>, Term {
+public class Atom implements Term {
     
     private final String atom;
 
@@ -13,7 +13,6 @@ public class Atom implements Constant<Atom>, Term {
     }
 
     // todo should we just use equals???
-    @Override
     public boolean same(Atom atom) {
         return this.atom.equals(atom.atom);
     }

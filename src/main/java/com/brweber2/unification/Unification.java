@@ -1,5 +1,7 @@
 package com.brweber2.unification;
 
+import com.brweber2.term.*;
+
 /**
  * @author brweber2
  * Copyright: 2012
@@ -51,7 +53,7 @@ public class Unification implements Unify {
             if ( a.sameFunctor(b) && a.sameArity(b) )
             {
                 // args unify
-                if ( argsUnify(soFar,a,b) )
+                if ( argsUnify(soFar, a, b) )
                 {
                     // variables are compatible
                     return soFar;
@@ -67,7 +69,7 @@ public class Unification implements Unify {
 
     boolean argsUnify(UnificationResult soFar, ComplexTerm a, ComplexTerm b) {
         for (int i = 0; i < a.getArity(); i++ ) {
-            UnificationResult match = unify( soFar, a.getTerms().get(i), b.getTerms().get(i));
+            UnificationResult match = unify(soFar, a.getTerms().get(i), b.getTerms().get(i));
             switch (match.getSuccess()) {
                 case YES:
                     break;

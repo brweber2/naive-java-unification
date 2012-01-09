@@ -1,4 +1,4 @@
-package com.brweber2.unification;
+package com.brweber2.term;
 
 import java.util.ArrayList;
 import java.util.Collections;

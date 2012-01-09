@@ -1,5 +1,9 @@
 package com.brweber2.unification;
 
+import com.brweber2.term.Atom;
+import com.brweber2.term.ComplexTerm;
+import com.brweber2.term.Numeric;
+import com.brweber2.term.Variable;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

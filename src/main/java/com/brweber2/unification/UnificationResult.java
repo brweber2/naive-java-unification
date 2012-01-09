@@ -1,5 +1,8 @@
 package com.brweber2.unification;
 
+import com.brweber2.term.Term;
+import com.brweber2.term.Variable;
+
 import java.util.HashMap;
 import java.util.Map;
 

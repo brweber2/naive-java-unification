@@ -1,4 +1,7 @@
-package com.brweber2.unification;
+package com.brweber2.kb;
+
+import com.brweber2.term.Term;
+import com.brweber2.unification.*;
 
 import java.util.ArrayList;
 import java.util.List;
