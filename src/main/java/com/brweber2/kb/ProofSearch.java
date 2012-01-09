@@ -19,7 +19,11 @@ public class ProofSearch {
     public ProofSearch(Unify unifier, KnowledgeBase knowledgeBase) {
         this.unifier = unifier;
         this.knowledgeBase = knowledgeBase;
-        this.ruleSearch = new RuleSearch(unifier,knowledgeBase);
+        this.ruleSearch = new RuleSearch(this);
+    }
+
+    public Unify getUnifier() {
+        return unifier;
     }
 
     public UnificationResult ask( Term question )
@@ -35,7 +39,7 @@ public class ProofSearch {
             }
         }
         for (Rule rule : knowledgeBase.getRules()) {
-            UnificationResult thisResult = ruleSearch.ask( question, rule );
+            UnificationResult thisResult = ruleSearch.ask(question, rule);
             if ( thisResult.getSuccess() == UnificationSuccess.YES )
             {
                 result.next(thisResult);

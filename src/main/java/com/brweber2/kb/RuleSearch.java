@@ -2,8 +2,12 @@ package com.brweber2.kb;
 
 import com.brweber2.term.Term;
 import com.brweber2.term.rule.Rule;
+import com.brweber2.term.rule.RuleAnd;
+import com.brweber2.term.rule.RuleBody;
+import com.brweber2.term.rule.RuleOr;
 import com.brweber2.unification.UnificationResult;
-import com.brweber2.unification.Unify;
+import com.brweber2.unification.UnificationScope;
+import com.brweber2.unification.UnificationSuccess;
 
 /**
  * @author brweber2
@@ -11,12 +15,10 @@ import com.brweber2.unification.Unify;
  */
 public class RuleSearch {
 
-    private Unify unifier;
-    private KnowledgeBase knowledgeBase;
+    private ProofSearch proofSearch;
 
-    public RuleSearch(Unify unifier, KnowledgeBase knowledgeBase) {
-        this.unifier = unifier;
-        this.knowledgeBase = knowledgeBase;
+    public RuleSearch(ProofSearch proofSearch) {
+        this.proofSearch = proofSearch;
     }
 
     /*
@@ -77,8 +79,63 @@ public class RuleSearch {
         }
     }
     */
+    
+    public UnificationResult unifyRuleBody( UnificationScope scope, RuleBody ruleBody )
+    {
+        if ( ruleBody instanceof RuleAnd )
+        {
+            RuleAnd ruleAnd = (RuleAnd) ruleBody;
+            RuleBody left = ruleAnd.getLeft();
+            UnificationResult leftResult = unifyRuleBody( scope, left );
+            RuleBody right = ruleAnd.getRight();
+            UnificationResult rightResult = unifyRuleBody( scope, right );
+            if ( leftResult.getSuccess() == UnificationSuccess.YES && rightResult.getSuccess() == UnificationSuccess.YES )
+            {
+                return new UnificationResult(scope, left, right );
+            }
+            return new UnificationResult();
+        }
+        else if ( ruleBody instanceof RuleOr )
+        {
+            RuleOr ruleAnd = (RuleOr) ruleBody;
+            RuleBody left = ruleAnd.getLeft();
+            UnificationResult leftResult = unifyRuleBody( scope, left );
+            RuleBody right = ruleAnd.getRight();
+            UnificationResult rightResult = unifyRuleBody( scope, right );
+            if ( leftResult.getSuccess() == UnificationSuccess.YES || rightResult.getSuccess() == UnificationSuccess.YES )
+            {
+                RuleBody l = null;
+                if ( leftResult.getSuccess() == UnificationSuccess.YES )
+                {
+                    l = left;
+                }
+                RuleBody r = null;
+                if ( rightResult.getSuccess() == UnificationSuccess.YES )
+                {
+                    r = right;
+                }
+                return new UnificationResult(scope, l, r );
+            }
+            return new UnificationResult();
+        }
+        else
+        {
+            return proofSearch.ask((Term) ruleBody);
+        }
+    }
 
     public UnificationResult ask(Term question, Rule rule) {
-        return null; // todo
+        // does the question unify with head?
+        
+        UnificationResult headResult = proofSearch.getUnifier().unify(question, rule.getHead() );
+        if ( headResult.getSuccess() == UnificationSuccess.YES )
+        {
+            // now we have to see if all the conditions in body hold
+            return unifyRuleBody( headResult.getUnifyScope(), rule.getBody() );
+        }
+        else
+        {
+            return headResult;
+        }
     }
 }

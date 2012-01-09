@@ -21,6 +21,13 @@ public class Variable implements Term {
     }
 
     @Override
+    public String toString() {
+        return "Variable{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

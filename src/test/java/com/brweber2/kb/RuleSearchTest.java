@@ -7,6 +7,9 @@ import com.brweber2.term.rule.Rule;
 import com.brweber2.term.rule.RuleAnd;
 import com.brweber2.unification.Unification;
 import com.brweber2.unification.UnificationResult;
+import com.brweber2.unification.UnificationSuccess;
+import com.brweber2.unification.Unify;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -25,8 +28,13 @@ public class RuleSearchTest {
         // what(Z) :- hello(Z), bye(Z).
         knowledgeBase.rule( new Rule(new ComplexTerm("what",new Variable("Z")),new RuleAnd(new ComplexTerm("hello",new Variable("Z")), new ComplexTerm("bye",new Variable("Z")))) );
 
-        RuleSearch ruleSearch = new RuleSearch(new Unification(),knowledgeBase);
+        Unify unifier = new Unification();
+        RuleSearch ruleSearch = new RuleSearch(new ProofSearch(unifier,knowledgeBase));
         UnificationResult unificationResult = ruleSearch.ask(new ComplexTerm("what", new Variable("Z")), new Rule(new ComplexTerm("what", new Variable("Z")), new RuleAnd(new ComplexTerm("hello", new Variable("Z")), new ComplexTerm("bye", new Variable("Z")))));
 
+        Assert.assertTrue( unificationResult.getSuccess() == UnificationSuccess.YES );
+        Assert.assertTrue(unificationResult.getScope().containsKey(new Variable("Z")));
+        Assert.assertEquals(unificationResult.getScope().get(new Variable("Z")), new Atom("gary") );
+        Assert.assertNull( unificationResult.getNext() );
     }
 }

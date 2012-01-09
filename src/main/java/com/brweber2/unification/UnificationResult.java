@@ -2,6 +2,7 @@ package com.brweber2.unification;
 
 import com.brweber2.term.Term;
 import com.brweber2.term.Variable;
+import com.brweber2.term.rule.RuleBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,15 +16,15 @@ public class UnificationResult {
     private final UnificationScope scope;
     private UnificationResult next;
     // unifying terms
-    private Term term1;
-    private Term term2;
+    private RuleBody term1;
+    private RuleBody term2;
 
     public UnificationResult() {
         this.success = UnificationSuccess.NO;
         this.scope = new UnificationScope();
     }
 
-    public UnificationResult( UnificationScope scope, Term term1, Term term2) {
+    public UnificationResult( UnificationScope scope, RuleBody term1, RuleBody term2) {
         this.success = UnificationSuccess.YES;        
         this.scope = scope;
         this.term1 = term1;
@@ -48,11 +49,11 @@ public class UnificationResult {
         return scope.getScope();
     }
 
-    public Term getTerm1() {
+    public RuleBody getTerm1() {
         return term1;
     }
 
-    public Term getTerm2() {
+    public RuleBody getTerm2() {
         return term2;
     }
 
@@ -76,5 +77,9 @@ public class UnificationResult {
     public void print()
     {
         System.out.println(toString());
+    }
+
+    public UnificationScope getUnifyScope() {
+        return scope;
     }
 }
