@@ -4,6 +4,7 @@ import com.brweber2.kb.KnowledgeBase;
 import com.brweber2.term.Atom;
 import com.brweber2.term.ComplexTerm;
 import com.brweber2.term.Variable;
+import com.brweber2.unification.Unification;
 import org.testng.annotations.Test;
 
 /**
@@ -18,6 +19,7 @@ public class KnowledgeBaseTest {
         knowledgeBase.fact( new ComplexTerm("hello", 1, new Atom("dave")));
         knowledgeBase.fact( new ComplexTerm("hello", 1, new Atom("gary")));
 
-        knowledgeBase.ask( new ComplexTerm("hello",1, new Variable("x")));
+        ProofSearch proofSearch = new ProofSearch(new Unification(),knowledgeBase);
+        proofSearch.ask( new ComplexTerm("hello",1, new Variable("x")));
     }
 }

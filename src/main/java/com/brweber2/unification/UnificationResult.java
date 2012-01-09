@@ -12,51 +12,61 @@ import java.util.Map;
  */
 public class UnificationResult {
     private final UnificationSuccess success;
-    private Map<Variable,Term> scope = new HashMap<Variable,Term>();
+    private final UnificationScope scope;
+    private UnificationResult next;
+    // unifying terms
+    private Term term1;
+    private Term term2;
 
-    public UnificationResult(UnificationSuccess success) {
-        this.success = success;
+    public UnificationResult() {
+        this.success = UnificationSuccess.NO;
+        this.scope = new UnificationScope();
     }
-    
-    public UnificationSuccess set(Variable term1, Term value)
+
+    public UnificationResult( UnificationScope scope, Term term1, Term term2) {
+        this.success = UnificationSuccess.YES;        
+        this.scope = scope;
+        this.term1 = term1;
+        this.term2 = term2;
+    }
+
+    public UnificationResult next( UnificationResult result )
     {
-        if ( scope.containsKey( term1 ) )
-        {
-            if ( scope.get(term1).equals(value) )
-            {
-                return UnificationSuccess.YES;
-            }
-            else
-            {
-                return UnificationSuccess.NO;
-            }
-        }
-        else
-        {
-            scope.put(term1,value);
-            return UnificationSuccess.YES;
-        }
+        this.next = result;
+        return result;
+    }
+
+    public UnificationResult getNext() {
+        return next;
     }
 
     public UnificationSuccess getSuccess() {
         return success;
     }
 
-    Map<Variable, Term> getScope() {
-        return scope;
+    public Map<Variable, Term> getScope() {
+        return scope.getScope();
+    }
+
+    public String toString()
+    {
+        StringBuilder str = new StringBuilder();
+        if ( success == UnificationSuccess.YES )
+        {
+            if ( !scope.getScope().isEmpty() )
+            {
+                for (Variable variable : scope.getScope().keySet()) {
+                    str.append(variable.prettyPrint() + ": " + scope.getScope().get(variable).prettyPrint() + "\n");
+                }
+            }
+        }
+        str.append(success.name().toLowerCase());
+        str.append("\n");
+        return str.toString();
     }
 
     public void print()
     {
-        if ( success == UnificationSuccess.YES )
-        {
-            if ( !scope.isEmpty() )
-            {
-                for (Variable variable : scope.keySet()) {
-                    System.out.println(variable.prettyPrint() + ": " + scope.get(variable).prettyPrint() + "\n");
-                }
-            }
-        }
-        System.out.println(success.name().toLowerCase());
+        System.out.println(toString());
     }
 }

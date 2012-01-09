@@ -1,7 +1,7 @@
 package com.brweber2.kb;
 
 import com.brweber2.term.Term;
-import com.brweber2.unification.*;
+import com.brweber2.term.rule.Rule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,27 +13,23 @@ import java.util.List;
 public class KnowledgeBase {
     
     private List<Term> terms = new ArrayList<Term>();
-    private Unify unifier = new Unification();
+    private List<Rule> rules = new ArrayList<Rule>();
     
     public void fact( Term fact )
     {
         terms.add(fact);
     }
     
-    public void rule( Term rule )
+    public void rule( Rule rule )
     {
-        throw new RuntimeException("not implemented!");
+        rules.add(rule);
     }
-    
-    public void ask( Term question )
-    {
-        for (Term term : terms) {
-            UnificationResult result = unifier.unify( question, term );
-            if ( result.getSuccess() == UnificationSuccess.YES )
-            {
-                result.print();
-            }
-        }
-        System.out.println("done");
+
+    public List<Term> getTerms() {
+        return terms;
+    }
+
+    public List<Rule> getRules() {
+        return rules;
     }
 }
