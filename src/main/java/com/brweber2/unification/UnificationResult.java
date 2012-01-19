@@ -33,6 +33,10 @@ public class UnificationResult {
 
     public UnificationResult next( UnificationResult result )
     {
+        if ( this.equals(result) )
+        {
+            return this;
+        }
         this.next = result;
         return result;
     }
@@ -81,5 +85,31 @@ public class UnificationResult {
 
     public UnificationScope getUnifyScope() {
         return scope;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UnificationResult that = (UnificationResult) o;
+
+        if (next != null ? !next.equals(that.next) : that.next != null) return false;
+        if (!scope.equals(that.scope)) return false;
+        if (success != that.success) return false;
+        if (!term1.equals(that.term1)) return false;
+        if (!term2.equals(that.term2)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = success.hashCode();
+        result = 31 * result + scope.hashCode();
+        result = 31 * result + (next != null ? next.hashCode() : 0);
+        result = 31 * result + term1.hashCode();
+        result = 31 * result + term2.hashCode();
+        return result;
     }
 }

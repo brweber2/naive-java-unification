@@ -3,6 +3,7 @@ package com.brweber2.kb;
 import com.brweber2.term.Term;
 import com.brweber2.term.rule.Rule;
 import com.brweber2.unification.UnificationResult;
+import com.brweber2.unification.UnificationScope;
 import com.brweber2.unification.UnificationSuccess;
 import com.brweber2.unification.Unify;
 
@@ -28,10 +29,15 @@ public class ProofSearch {
 
     public UnificationResult ask( Term question )
     {
+        return ask( new UnificationScope(), question );
+    }
+    
+    public UnificationResult ask( UnificationScope scope, Term question )
+    {
         UnificationResult result = new UnificationResult();
         UnificationResult baseResult = result;
         for (Term term : knowledgeBase.getTerms()) {
-            UnificationResult thisResult = unifier.unify(question, term);
+            UnificationResult thisResult = unifier.unify(new UnificationScope(scope), question, term);
             if ( thisResult.getSuccess() == UnificationSuccess.YES )
             {
                 result.next(thisResult);
@@ -39,12 +45,16 @@ public class ProofSearch {
             }
         }
         for (Rule rule : knowledgeBase.getRules()) {
-            UnificationResult thisResult = ruleSearch.ask(question, rule);
+            UnificationResult thisResult = ruleSearch.ask(new UnificationScope(scope), question, rule);
             if ( thisResult.getSuccess() == UnificationSuccess.YES )
             {
                 result.next(thisResult);
                 result = thisResult;
             }
+        }
+        if ( baseResult == result )
+        {
+            return baseResult;
         }
         return baseResult.getNext();
     }

@@ -13,41 +13,36 @@ import java.util.Set;
  *         Copyright: 2012
  */
 public class UnificationScope {
+    private UnificationScope parent;
     private Map<Variable,Term> scope = new LinkedHashMap<Variable, Term>();
 
     public UnificationScope() {
     }
 
-    private UnificationScope(Map<Variable, Term> scope) {
-        this.scope = scope;
-    }
-
-    public UnificationScope merge( UnificationScope unificationScope )
+    public UnificationScope( UnificationScope parentScope )
     {
-        Map<Variable,Term> map = new HashMap<Variable,Term>(scope);
-        map.putAll(unificationScope.scope);
-        return new UnificationScope(map);
+        this.parent = parentScope;
     }
 
     public boolean set(Variable term1, Term value)
     {
         System.out.println("trying to set " + term1 + " to " + value);
-        if ( scope.containsKey( term1 ) )
+        if ( has(term1) )
         {
             Term existingValue = get(term1);
             if ( existingValue instanceof Variable && value instanceof Variable)
             {
                 Variable existingVariable = (Variable)existingValue;
                 Variable valueVariable = (Variable)value;
-                if ( scope.containsKey(existingVariable) && scope.containsKey(valueVariable))
+                if ( has(existingVariable) && has(valueVariable))
                 {
                     return resolve(existingVariable).equals(resolve(valueVariable));
                 }
-                else if ( scope.containsKey(existingVariable))
+                else if ( has(existingVariable))
                 {
                     return resolve(existingVariable).equals(value);
                 }
-                else if ( scope.containsKey(valueVariable))
+                else if ( has(valueVariable))
                 {
                     return resolve(valueVariable).equals(existingValue);
                 }
@@ -59,7 +54,7 @@ public class UnificationScope {
             else if ( existingValue instanceof Variable )
             {
                 Variable existingVariable = (Variable) existingValue;
-                if ( scope.containsKey(existingVariable) )
+                if ( has(existingVariable) )
                 {
                     return value.equals(resolve(existingVariable));
                 }
@@ -71,7 +66,7 @@ public class UnificationScope {
             else if ( value instanceof Variable )
             {
                 Variable valueVariable = (Variable)value;
-                if ( scope.containsKey(valueVariable) )
+                if ( has(valueVariable) )
                 {
                     return existingValue.equals(resolve(valueVariable));
                 }
@@ -116,12 +111,17 @@ public class UnificationScope {
     
     public Set<Variable> keys()
     {
-        return scope.keySet();
+        Set<Variable> s = scope.keySet();
+        if ( parent != null )
+        {
+            s.addAll(parent.keys());
+        }
+        return s;
     }
     
     public boolean has(Variable variable )
     {
-        return scope.containsKey(variable);
+        return scope.containsKey(variable) || (parent != null && parent.has(variable));
     }
 
     public Term get(Variable variable)
@@ -131,6 +131,14 @@ public class UnificationScope {
     
     public Term resolve(Variable variable)
     {
+        if ( !scope.containsKey(variable) )
+        {
+            if ( parent == null )
+            {
+                throw new RuntimeException("No such variable " + variable + " found in scope.");
+            }
+            return parent.resolve(variable);
+        }
         System.out.println("trying to resolve " + variable + " in " + scope);
         Term term = scope.get(variable);
         if ( term instanceof Variable )
@@ -143,6 +151,26 @@ public class UnificationScope {
 
     public boolean isEmpty()
     {
-        return scope.isEmpty();
+        return scope.isEmpty() && (parent == null || parent.isEmpty());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UnificationScope that = (UnificationScope) o;
+
+        if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
+        if (!scope.equals(that.scope)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = parent != null ? parent.hashCode() : 0;
+        result = 31 * result + scope.hashCode();
+        return result;
     }
 }

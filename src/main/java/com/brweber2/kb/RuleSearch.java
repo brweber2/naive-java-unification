@@ -21,61 +21,72 @@ public class RuleSearch {
         this.proofSearch = proofSearch;
     }
     
-    private UnificationResult merge(UnificationResult left, UnificationResult right)
-    {
-        return new UnificationResult(left.getScope().merge(right.getScope()),null,null);
-    }
-    
     public UnificationResult unifyRuleBody( UnificationScope scope, RuleBody ruleBody )
     {
         if ( ruleBody instanceof RuleAnd )
         {
             RuleAnd ruleAnd = (RuleAnd) ruleBody;
             RuleBody left = ruleAnd.getLeft();
-            UnificationResult leftResult = unifyRuleBody( scope, left );
             RuleBody right = ruleAnd.getRight();
-            UnificationResult rightResult = unifyRuleBody( scope, right );
-            if ( leftResult.getSuccess() == UnificationSuccess.YES && rightResult.getSuccess() == UnificationSuccess.YES )
+            UnificationResult finalResult = new UnificationResult();
+            UnificationResult currentResult = finalResult;
+            UnificationResult leftResult = unifyRuleBody(new UnificationScope(scope), left);
+            while ( leftResult != null )
             {
-                UnificationResult union = new UnificationResult();
-                while ( leftResult != null )
+                if ( leftResult.getSuccess() == UnificationSuccess.YES )
                 {
+                    UnificationResult rightResult = unifyRuleBody(new UnificationScope(leftResult.getScope()),right);
                     while ( rightResult != null )
                     {
-                        if ( isConsistent(leftResult, rightResult))
+                        if ( rightResult.getSuccess() == UnificationSuccess.YES )
                         {
-                            union.next(merge(leftResult,rightResult));
+                            currentResult = currentResult.next(new UnificationResult(rightResult.getScope(), left, right));
                         }
                         rightResult = rightResult.getNext();
                     }
-                    leftResult = leftResult.getNext();
                 }
-                return union.getNext();
+
+                leftResult = leftResult.getNext();
             }
-            return new UnificationResult();
+            if ( finalResult != currentResult )
+            {
+                return finalResult.getNext();
+            }
+            return finalResult;
         }
         else if ( ruleBody instanceof RuleOr )
         {
-            RuleOr ruleAnd = (RuleOr) ruleBody;
-            RuleBody left = ruleAnd.getLeft();
-            UnificationResult leftResult = unifyRuleBody( scope, left );
-            RuleBody right = ruleAnd.getRight();
-            UnificationResult rightResult = unifyRuleBody( scope, right );
-            if ( leftResult.getSuccess() == UnificationSuccess.YES || rightResult.getSuccess() == UnificationSuccess.YES )
+            RuleOr ruleOr = (RuleOr) ruleBody;
+            RuleBody left = ruleOr.getLeft();
+            RuleBody right = ruleOr.getRight();
+
+            UnificationResult finalResult = new UnificationResult();
+            UnificationResult currentResult = finalResult;
+            
+            UnificationResult leftResult = unifyRuleBody( new UnificationScope(scope), left );
+            while ( leftResult != null )
             {
-                UnificationResult l = null;
                 if ( leftResult.getSuccess() == UnificationSuccess.YES )
                 {
-                    l = leftResult;
+                    currentResult = currentResult.next(new UnificationResult(leftResult.getScope(),left,right));
                 }
-                UnificationResult r = null;
+
+                leftResult = leftResult.getNext();
+            }
+            UnificationResult rightResult = unifyRuleBody( new UnificationScope(scope), right );
+            while ( rightResult != null )
+            {
                 if ( rightResult.getSuccess() == UnificationSuccess.YES )
                 {
-                    r = rightResult;
+                    currentResult = currentResult.next(new UnificationResult(rightResult.getScope(),left,right));
                 }
-                return merge(l,r);
+                rightResult = rightResult.getNext();
             }
-            return new UnificationResult();
+            if ( finalResult != currentResult )
+            {
+                return finalResult.getNext();
+            }
+            return finalResult;
         }
         else
         {
@@ -83,14 +94,14 @@ public class RuleSearch {
         }
     }
 
-    private boolean isConsistent(UnificationResult leftResult, UnificationResult rightResult) {
-        return false;  //todo
-    }
-
     public UnificationResult ask(Term question, Rule rule) {
+        return ask( new UnificationScope(), question, rule );
+    }
+    
+    public UnificationResult ask(UnificationScope scope, Term question, Rule rule) {
         // does the question unify with head?
         
-        UnificationResult headResult = proofSearch.getUnifier().unify(question, rule.getHead() );
+        UnificationResult headResult = proofSearch.getUnifier().unify(scope, question, rule.getHead() );
         if ( headResult.getSuccess() == UnificationSuccess.YES )
         {
             // now we have to see if all the conditions in body hold
