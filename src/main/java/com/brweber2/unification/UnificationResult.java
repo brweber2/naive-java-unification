@@ -45,8 +45,8 @@ public class UnificationResult {
         return success;
     }
 
-    public Map<Variable, Term> getScope() {
-        return scope.getScope();
+    public UnificationScope getScope() {
+        return scope;
     }
 
     public RuleBody getTerm1() {
@@ -62,10 +62,10 @@ public class UnificationResult {
         StringBuilder str = new StringBuilder();
         if ( success == UnificationSuccess.YES )
         {
-            if ( !scope.getScope().isEmpty() )
+            if ( !scope.isEmpty() )
             {
-                for (Variable variable : scope.getScope().keySet()) {
-                    str.append(variable.prettyPrint() + ": " + scope.getScope().get(variable).prettyPrint() + "\n");
+                for (Variable variable : scope.keys()) {
+                    str.append(variable.prettyPrint() + ": " + scope.resolve(variable).prettyPrint() + "\n");
                 }
             }
         }

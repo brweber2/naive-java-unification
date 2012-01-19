@@ -25,13 +25,13 @@ public class ProofSearchTest {
         ProofSearch proofSearch = new ProofSearch(new Unification(),knowledgeBase);
         UnificationResult unificationResult = proofSearch.ask(new ComplexTerm("hello", new Variable("x")));
         Assert.assertTrue(unificationResult.getSuccess() == UnificationSuccess.YES);
-        Assert.assertTrue(unificationResult.getScope().containsKey(new Variable("x")));
+        Assert.assertTrue(unificationResult.getScope().has(new Variable("x")));
         Assert.assertEquals(unificationResult.getScope().get(new Variable("x")), new Atom("dave") );
         Assert.assertNotNull(unificationResult.getNext());
 
         UnificationResult next = unificationResult.getNext();
         Assert.assertTrue(next.getSuccess() == UnificationSuccess.YES);
-        Assert.assertTrue(next.getScope().containsKey(new Variable("x")));
+        Assert.assertTrue(next.getScope().has(new Variable("x")));
         Assert.assertEquals(next.getScope().get(new Variable("x")), new Atom("gary") );
         Assert.assertNull(next.getNext());
     }

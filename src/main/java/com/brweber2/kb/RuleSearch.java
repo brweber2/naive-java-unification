@@ -20,65 +20,11 @@ public class RuleSearch {
     public RuleSearch(ProofSearch proofSearch) {
         this.proofSearch = proofSearch;
     }
-
-    /*
-    public List<UnificationResult> unify(KnowledgeBase knowledgeBase, Term term1, Rule rule)
+    
+    private UnificationResult merge(UnificationResult left, UnificationResult right)
     {
-        List<Variable> variablesFromQuery = term1.getVariables();
-        Term newTerm = term1.copyYourself();
-        Rule newRule = new Rule(rule.getHead(),rule.getBody());
-        for (Variable variableFromQuery : variablesFromQuery) {
-            String randomVariableName = UUID.randomUUID().toString();
-            newTerm.replaceAny(variableFromQuery).with(randomVariableName);
-            newRule.replaceAny(variableFromQuery).with(randomVariableName);
-        }
-        // todo implement backtracking!!! and checking the actual body of the rule!!!!
-        UnificationResult headResult = unify(new UnificationResult(UnificationSuccess.NO),newTerm,newRule.getHead());
-        if ( headResult.getSuccess() == UnificationSuccess.NO )
-        {
-            return headResult;
-        }
-        RuleBody nextRule = newRule.getBody();
-        return processPartOfRule( knowledgeBase, nextRule );
+        return new UnificationResult(left.getScope().merge(right.getScope()),null,null);
     }
-
-    private List<UnificationResult> processPartOfRule( KnowledgeBase knowledgeBase, RuleBody ruleBody )
-    {
-        if ( ruleBody instanceof RuleAnd )
-        {
-            RuleAnd ruleAnd = (RuleAnd) ruleBody;
-            UnificationResult leftResult = processPartOfRule( knowledgeBase, ruleAnd.getLeft() );
-            UnificationResult rightResult = processPartOfRule(knowledgeBase, ruleAnd.getRight());
-            if ( leftResult.getSuccess() == UnificationSuccess.YES && rightResult.getSuccess() == UnificationSuccess.YES )
-            {
-                // success
-            }
-            else
-            {
-                // nope
-            }
-        }
-        else if ( ruleBody instanceof RuleOr )
-        {
-            RuleAnd ruleAnd = (RuleAnd) ruleBody;
-            UnificationResult leftResult = processPartOfRule( knowledgeBase, ruleAnd.getLeft() );
-            UnificationResult rightResult = processPartOfRule( knowledgeBase, ruleAnd.getRight() );
-            if ( leftResult.getSuccess() == UnificationSuccess.YES || rightResult.getSuccess() == UnificationSuccess.YES )
-            {
-                // success
-            }
-            else
-            {
-                // nope
-            }
-        }
-        else
-        {
-            Term term = (Term) ruleBody;
-            return knowledgeBase.ask( term );
-        }
-    }
-    */
     
     public UnificationResult unifyRuleBody( UnificationScope scope, RuleBody ruleBody )
     {
@@ -91,7 +37,20 @@ public class RuleSearch {
             UnificationResult rightResult = unifyRuleBody( scope, right );
             if ( leftResult.getSuccess() == UnificationSuccess.YES && rightResult.getSuccess() == UnificationSuccess.YES )
             {
-                return new UnificationResult(scope, left, right );
+                UnificationResult union = new UnificationResult();
+                while ( leftResult != null )
+                {
+                    while ( rightResult != null )
+                    {
+                        if ( isConsistent(leftResult, rightResult))
+                        {
+                            union.next(merge(leftResult,rightResult));
+                        }
+                        rightResult = rightResult.getNext();
+                    }
+                    leftResult = leftResult.getNext();
+                }
+                return union.getNext();
             }
             return new UnificationResult();
         }
@@ -104,17 +63,17 @@ public class RuleSearch {
             UnificationResult rightResult = unifyRuleBody( scope, right );
             if ( leftResult.getSuccess() == UnificationSuccess.YES || rightResult.getSuccess() == UnificationSuccess.YES )
             {
-                RuleBody l = null;
+                UnificationResult l = null;
                 if ( leftResult.getSuccess() == UnificationSuccess.YES )
                 {
-                    l = left;
+                    l = leftResult;
                 }
-                RuleBody r = null;
+                UnificationResult r = null;
                 if ( rightResult.getSuccess() == UnificationSuccess.YES )
                 {
-                    r = right;
+                    r = rightResult;
                 }
-                return new UnificationResult(scope, l, r );
+                return merge(l,r);
             }
             return new UnificationResult();
         }

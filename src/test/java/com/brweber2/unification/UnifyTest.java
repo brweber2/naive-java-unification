@@ -56,7 +56,7 @@ public class UnifyTest {
         UnificationResult result = unifier.unify(variable1,atom1);
         Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
         result.print();
-        Assert.assertTrue( result.getScope().containsKey(variable1) );
+        Assert.assertTrue( result.getScope().has(variable1) );
         Assert.assertTrue( result.getScope().get(variable1).equals(atom1));
     }
 
@@ -70,7 +70,7 @@ public class UnifyTest {
         UnificationResult result = unifier.unify(atom1,variable1);
         Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
         result.print();
-        Assert.assertTrue( result.getScope().containsKey(variable1) );
+        Assert.assertTrue( result.getScope().has(variable1) );
         Assert.assertTrue( result.getScope().get(variable1).equals(atom1));
     }
 
@@ -84,7 +84,7 @@ public class UnifyTest {
         UnificationResult result = unifier.unify(variable1,numeric1);
         Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
         result.print();
-        Assert.assertTrue( result.getScope().containsKey(variable1) );
+        Assert.assertTrue( result.getScope().has(variable1) );
         Assert.assertTrue( result.getScope().get(variable1).equals(numeric1));
     }
 
@@ -98,7 +98,7 @@ public class UnifyTest {
         UnificationResult result = unifier.unify(numeric1,variable1);
         Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
         result.print();
-        Assert.assertTrue( result.getScope().containsKey(variable1) );
+        Assert.assertTrue( result.getScope().has(variable1) );
         Assert.assertTrue( result.getScope().get(variable1).equals(numeric1));
     }
     
@@ -128,9 +128,9 @@ public class UnifyTest {
         UnificationResult result = unifier.unify(complexTerm1,complexTerm2);
         Assert.assertTrue( result.getSuccess() == UnificationSuccess.YES );
         result.print();
-        Assert.assertTrue( result.getScope().containsKey(x));
+        Assert.assertTrue( result.getScope().has(x));
         Assert.assertTrue( result.getScope().get(x).equals(atom1));
-        Assert.assertTrue( result.getScope().containsKey(y));
+        Assert.assertTrue( result.getScope().has(y));
         Assert.assertTrue( result.getScope().get(y).equals(numeric1));
     }
 

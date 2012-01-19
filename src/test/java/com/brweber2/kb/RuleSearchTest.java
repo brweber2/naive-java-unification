@@ -33,7 +33,7 @@ public class RuleSearchTest {
         UnificationResult unificationResult = ruleSearch.ask(new ComplexTerm("what", new Variable("Z")), new Rule(new ComplexTerm("what", new Variable("Z")), new RuleAnd(new ComplexTerm("hello", new Variable("Z")), new ComplexTerm("bye", new Variable("Z")))));
 
         Assert.assertTrue( unificationResult.getSuccess() == UnificationSuccess.YES );
-        Assert.assertTrue(unificationResult.getScope().containsKey(new Variable("Z")));
+        Assert.assertTrue(unificationResult.getScope().has(new Variable("Z")));
         Assert.assertEquals(unificationResult.getScope().get(new Variable("Z")), new Atom("gary") );
         Assert.assertNull( unificationResult.getNext() );
     }
