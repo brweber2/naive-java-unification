@@ -83,6 +83,10 @@ public class RuleSearch {
         }
     }
 
+    private boolean isConsistent(UnificationResult leftResult, UnificationResult rightResult) {
+        return false;  //todo
+    }
+
     public UnificationResult ask(Term question, Rule rule) {
         // does the question unify with head?
         

@@ -20,14 +20,14 @@ public class Unification implements Unify {
         UnificationResult success = new UnificationResult( scope, term1, term2 );
         if ( term1 instanceof Atom && term2 instanceof Atom )
         {
-            if ( ((Atom)term1).same( (Atom) term2 ) )
+            if ( ((Atom)term1).equals( (Atom) term2 ) )
             {
                 return success;
             }
         }
         else if ( term1 instanceof Numeric && term2 instanceof Numeric )
         {
-            if ( ((Numeric)term1).same( (Numeric) term2 ) )
+            if ( ((Numeric)term1).equals( (Numeric) term2 ) )
             {
                 return success;
             }

@@ -11,12 +11,6 @@ public class Numeric implements Term {
         this.number = number;
     }
 
-    // todo just use equals?
-    public boolean same(Numeric numeric) {
-        // todo fix me, this is pretty asinine ...
-        return this.number.equals(numeric.number);
-    }
-
     @Override
     public String prettyPrint() {
         return number;

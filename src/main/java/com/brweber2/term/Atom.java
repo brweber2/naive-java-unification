@@ -12,11 +12,6 @@ public class Atom implements Term {
         this.atom = atom;
     }
 
-    // todo should we just use equals???
-    public boolean same(Atom atom) {
-        return this.atom.equals(atom.atom);
-    }
-
     @Override
     public String prettyPrint() {
         return atom;
