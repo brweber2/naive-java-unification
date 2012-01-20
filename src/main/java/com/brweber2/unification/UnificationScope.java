@@ -173,4 +173,12 @@ public class UnificationScope {
         result = 31 * result + scope.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "UnificationScope{" +
+                "parent=" + parent +
+                ", scope=" + scope +
+                '}';
+    }
 }

@@ -40,4 +40,12 @@ public class RuleOr {
         result = 31 * result + right.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "RuleOr{" +
+                "left=" + left +
+                ", right=" + right +
+                '}';
+    }
 }

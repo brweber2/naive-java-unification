@@ -40,4 +40,12 @@ public class RuleAnd implements RuleBody {
         result = 31 * result + right.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "RuleAnd{" +
+                "left=" + left +
+                ", right=" + right +
+                '}';
+    }
 }

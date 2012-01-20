@@ -36,7 +36,7 @@ public class ProofSearch {
     {
         UnificationResult result = new UnificationResult();
         UnificationResult baseResult = result;
-        for (Term term : knowledgeBase.getTerms()) {
+        for (Term term : knowledgeBase.getTerms()) {   // todo this should be a map lookup for faster indexing...
             UnificationResult thisResult = unifier.unify(new UnificationScope(scope), question, term);
             if ( thisResult.getSuccess() == UnificationSuccess.YES )
             {
@@ -44,7 +44,7 @@ public class ProofSearch {
                 result = thisResult;
             }
         }
-        for (Rule rule : knowledgeBase.getRules()) {
+        for (Rule rule : knowledgeBase.getRules()) {  // todo this should be a map lookup for faster indexing...
             UnificationResult thisResult = ruleSearch.ask(new UnificationScope(scope), question, rule);
             if ( thisResult.getSuccess() == UnificationSuccess.YES )
             {

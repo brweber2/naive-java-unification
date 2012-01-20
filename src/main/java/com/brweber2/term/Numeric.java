@@ -32,4 +32,11 @@ public class Numeric implements Term {
     public int hashCode() {
         return number.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Numeric{" +
+                "number='" + number + '\'' +
+                '}';
+    }
 }

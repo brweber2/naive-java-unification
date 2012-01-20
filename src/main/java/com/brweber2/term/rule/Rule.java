@@ -24,4 +24,32 @@ public class Rule {
     public RuleBody getBody() {
         return body;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Rule rule = (Rule) o;
+
+        if (!body.equals(rule.body)) return false;
+        if (!head.equals(rule.head)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = head.hashCode();
+        result = 31 * result + body.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "head=" + head +
+                ", body=" + body +
+                '}';
+    }
 }

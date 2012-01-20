@@ -69,4 +69,13 @@ public class ComplexTerm implements Term  {
         result = 31 * result + terms.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ComplexTerm{" +
+                "functor='" + functor + '\'' +
+                ", arity=" + arity +
+                ", terms=" + terms +
+                '}';
+    }
 }
