@@ -17,33 +17,33 @@ public class Unification implements Unify {
     }
 
     public UnificationResult unify(UnificationScope scope, Term term1, Term term2) {
-        UnificationResult success = new UnificationResult( scope, term1, term2 );
+        boolean unified = false;
         if ( term1 instanceof Atom && term2 instanceof Atom )
         {
-            if ( ((Atom)term1).equals( (Atom) term2 ) )
+            if ( ((Atom)term1).equals((Atom) term2) )
             {
-                return success;
+                unified = true;
             }
         }
         else if ( term1 instanceof Numeric && term2 instanceof Numeric )
         {
-            if ( ((Numeric)term1).equals( (Numeric) term2 ) )
+            if ( ((Numeric)term1).equals((Numeric) term2) )
             {
-                return success;
+                unified = true;
             }
         }
         else if ( term1 instanceof Variable)
         {
             if ( scope.set((Variable)term1, term2) )
             {
-                return success;
+                unified = true;
             }
         }
         else if ( term2 instanceof Variable )
         {
             if ( scope.set((Variable)term2, term1) )
             {
-                return success;
+                unified = true;
             }
         }
         else if ( term1 instanceof ComplexTerm && term2 instanceof ComplexTerm )
@@ -57,10 +57,16 @@ public class Unification implements Unify {
                 if ( argsUnify(scope, a, b) )
                 {
                     // variables are compatible
-                    return success;
+                    unified = true;
                 }
             }
         }
+        if ( unified )
+        {
+            System.out.println("successfully unified " + term1 + " and " + term2 + " with scope: " + scope);
+            return new UnificationResult( scope, term1, term2 );
+        }
+        System.out.println("Unable to unify " + term1 + " and " + term2 + " with scope: " + scope);
         // did NOT unify
         return new UnificationResult();
     }

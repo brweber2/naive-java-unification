@@ -50,8 +50,10 @@ public class RuleSearch {
             }
             if ( finalResult != currentResult )
             {
+                System.out.println("unified and rule " + ruleBody + " with scope: " + scope );
                 return finalResult.getNext();
             }
+            System.out.println("Unable to unify and rule " + ruleBody + " with scope: " + scope);
             return finalResult;
         }
         else if ( ruleBody instanceof RuleOr )
@@ -84,8 +86,10 @@ public class RuleSearch {
             }
             if ( finalResult != currentResult )
             {
+                System.out.println("unified or rule " + ruleBody + " with scope: " + scope );
                 return finalResult.getNext();
             }
+            System.out.println("Unable to unify or rule " + ruleBody + " with scope: " + scope);
             return finalResult;
         }
         else
@@ -100,15 +104,19 @@ public class RuleSearch {
     
     public UnificationResult ask(UnificationScope scope, Term question, Rule rule) {
         // does the question unify with head?
+
+        System.out.println("asking: " + question + " with rule: " + rule + " with scope: " + scope);
         
-        UnificationResult headResult = proofSearch.getUnifier().unify(scope, question, rule.getHead() );
+        UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(scope), question, rule.getHead() );
         if ( headResult.getSuccess() == UnificationSuccess.YES )
         {
+            System.out.println("head unified");
             // now we have to see if all the conditions in body hold
-            return unifyRuleBody( headResult.getUnifyScope(), rule.getBody() );
+            return unifyRuleBody( new UnificationScope( headResult.getUnifyScope() ), rule.getBody() );
         }
         else
         {
+            System.out.println("head did not unify");
             return headResult;
         }
     }

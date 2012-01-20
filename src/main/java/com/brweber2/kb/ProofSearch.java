@@ -54,8 +54,10 @@ public class ProofSearch {
         }
         if ( baseResult == result )
         {
+            System.out.println("unable to answer " + question + " with scope: " + scope);
             return baseResult;
         }
+        System.out.println("answered " + question + " with scope: " + scope);
         return baseResult.getNext();
     }
 
