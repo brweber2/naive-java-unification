@@ -90,7 +90,7 @@ public class RuleSearch {
         }
         else
         {
-            return proofSearch.ask((Term) ruleBody);
+            return proofSearch.ask(scope, (Term) ruleBody);
         }
     }
 

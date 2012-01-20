@@ -33,10 +33,6 @@ public class UnificationResult {
 
     public UnificationResult next( UnificationResult result )
     {
-        if ( this.equals(result) )
-        {
-            return this;
-        }
         this.next = result;
         return result;
     }
