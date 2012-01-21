@@ -118,10 +118,10 @@ public class RuleSearch {
             if ( bodyResult.getSuccess() == UnificationSuccess.YES )
             {
                 System.out.println("body unified, checking scopes...");
-                if ( consistent( scope, bodyResult.getUnifyScope() ) )
+                if ( consistent( scope, headResult.getUnifyScope(), bodyResult.getUnifyScope() ) )
                 {
                     System.out.println("answered " + question + " with " + rule + " with scope " + scope);
-                    merge(scope,bodyResult.getUnifyScope());
+                    merge(scope,headResult.getUnifyScope(),bodyResult.getUnifyScope());
                     return new UnificationResult( scope, question, rule.getBody() );
                 }
             }
@@ -135,21 +135,52 @@ public class RuleSearch {
         }
     }
 
-    private void merge( UnificationScope scope, UnificationScope unifyScope )
+    private void merge( UnificationScope scope, UnificationScope headScope, UnificationScope bodyScope )
     {
-        for ( Variable variable : unifyScope.keys() )
+        for ( Variable variable : headScope.keys() )
         {
-            scope.set( variable, unifyScope.get( variable ) );
+            Term term = headScope.get( variable );
+            if ( term == null )
+            {
+                Term value = bodyScope.get( variable );
+                scope.set( variable, value );
+            }
+            else if ( term instanceof Variable )
+            {
+                Term value = bodyScope.get( (Variable) term );
+                scope.set( variable, value );
+            }
+            else
+            {
+                scope.set( variable, term );
+            }
         }
     }
 
-    private boolean consistent( UnificationScope scope, UnificationScope unifyScope )
+    private boolean consistent( UnificationScope scope, UnificationScope headScope, UnificationScope bodyScope )
     {
-        for ( Variable variable : unifyScope.keys() )
+        for ( Variable variable : headScope.keys() )
         {
-            if ( scope.has( variable ) )
+            Term term = headScope.get( variable );
+            if ( term == null )
             {
-                if ( !scope.get( variable ).equals( unifyScope.get(variable) ))
+                Term value = bodyScope.get( variable );
+                if ( scope.has( variable ) && !scope.get( variable ).equals( value ) )
+                {
+                    return false;
+                }
+            }
+            else if ( term instanceof Variable )
+            {
+                Term value = bodyScope.get( (Variable) term );
+                if ( scope.has( variable ) && !scope.get( variable ).equals( value ) )
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if ( scope.has( variable ) && !scope.get( variable ).equals( term ) )
                 {
                     return false;
                 }

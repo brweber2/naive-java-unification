@@ -29,8 +29,11 @@ public class RuleSearchTest {
         knowledgeBase.rule( new Rule(new ComplexTerm("what",new Variable("Z")),new RuleAnd(new ComplexTerm("hello",new Variable("Z")), new ComplexTerm("bye",new Variable("Z")))) );
 
         Unify unifier = new Unification();
-        RuleSearch ruleSearch = new RuleSearch(new ProofSearch(unifier,knowledgeBase));
-        UnificationResult unificationResult = ruleSearch.ask(new ComplexTerm("what", new Variable("Z")), new Rule(new ComplexTerm("what", new Variable("Z")), new RuleAnd(new ComplexTerm("hello", new Variable("Z")), new ComplexTerm("bye", new Variable("Z")))));
+        ProofSearch proofSearch = new ProofSearch(unifier,knowledgeBase);
+        // ?- what(Z).
+        UnificationResult unificationResult = proofSearch.ask( new ComplexTerm("what", new Variable("Z") ) );
+//        RuleSearch ruleSearch = new RuleSearch(new ProofSearch(unifier,knowledgeBase));
+//        UnificationResult unificationResult = ruleSearch.ask(new ComplexTerm("what", new Variable("Z")), new Rule(new ComplexTerm("what", new Variable("Z")), new RuleAnd(new ComplexTerm("hello", new Variable("Z")), new ComplexTerm("bye", new Variable("Z")))));
 
         Assert.assertTrue( unificationResult.getSuccess() == UnificationSuccess.YES );
         Assert.assertTrue(unificationResult.getScope().has(new Variable("Z")));
