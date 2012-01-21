@@ -1,6 +1,7 @@
 package com.brweber2.kb;
 
 import com.brweber2.term.Term;
+import com.brweber2.term.Variable;
 import com.brweber2.term.rule.Rule;
 import com.brweber2.term.rule.RuleAnd;
 import com.brweber2.term.rule.RuleBody;
@@ -113,12 +114,47 @@ public class RuleSearch {
         {
             System.out.println("head unified");
             // now we have to see if all the conditions in body hold
-            return unifyRuleBody( new UnificationScope( headResult.getUnifyScope() ), rule.getBody() );
+            UnificationResult bodyResult = unifyRuleBody( new UnificationScope( headResult.getUnifyScope() ), rule.getBody() );
+            if ( bodyResult.getSuccess() == UnificationSuccess.YES )
+            {
+                System.out.println("body unified, checking scopes...");
+                if ( consistent( scope, bodyResult.getUnifyScope() ) )
+                {
+                    System.out.println("answered " + question + " with " + rule + " with scope " + scope);
+                    merge(scope,bodyResult.getUnifyScope());
+                    return new UnificationResult( scope, question, rule.getBody() );
+                }
+            }
+            System.out.println("unable to answer " + question + " with " + rule + " with scope " + scope);
+            return new UnificationResult();
         }
         else
         {
             System.out.println("head did not unify");
             return headResult;
         }
+    }
+
+    private void merge( UnificationScope scope, UnificationScope unifyScope )
+    {
+        for ( Variable variable : unifyScope.keys() )
+        {
+            scope.set( variable, unifyScope.get( variable ) );
+        }
+    }
+
+    private boolean consistent( UnificationScope scope, UnificationScope unifyScope )
+    {
+        for ( Variable variable : unifyScope.keys() )
+        {
+            if ( scope.has( variable ) )
+            {
+                if ( !scope.get( variable ).equals( unifyScope.get(variable) ))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

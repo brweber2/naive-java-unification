@@ -3,6 +3,7 @@ package com.brweber2.unification;
 import com.brweber2.term.Term;
 import com.brweber2.term.Variable;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,15 +36,15 @@ public class UnificationScope {
                 Variable valueVariable = (Variable)value;
                 if ( has(existingVariable) && has(valueVariable))
                 {
-                    return get(existingVariable).equals(get(valueVariable));
+                    return get( existingVariable ).equals(get( valueVariable ));
                 }
                 else if ( has(existingVariable))
                 {
-                    return get(existingVariable).equals(value);
+                    return get( existingVariable ).equals(value);
                 }
                 else if ( has(valueVariable))
                 {
-                    return get(valueVariable).equals(existingValue);
+                    return get( valueVariable ).equals(existingValue);
                 }
                 else
                 {
@@ -55,7 +56,7 @@ public class UnificationScope {
                 Variable existingVariable = (Variable) existingValue;
                 if ( has(existingVariable) )
                 {
-                    return value.equals(get(existingVariable));
+                    return value.equals(get( existingVariable ));
                 }
                 else
                 {
@@ -67,7 +68,7 @@ public class UnificationScope {
                 Variable valueVariable = (Variable)value;
                 if ( has(valueVariable) )
                 {
-                    return existingValue.equals(get(valueVariable));
+                    return existingValue.equals(get( valueVariable ));
                 }
                 else
                 {
@@ -110,7 +111,7 @@ public class UnificationScope {
     
     public Set<Variable> keys()
     {
-        Set<Variable> s = scope.keySet();
+        Set<Variable> s = new HashSet<Variable>(scope.keySet());
         if ( parent != null )
         {
             s.addAll(parent.keys());
@@ -136,14 +137,14 @@ public class UnificationScope {
             {
                 throw new RuntimeException("No such variable " + variable + " found in scope.");
             }
-            return parent.resolve(variable,startingScope);
+            return parent.resolve( variable, startingScope );
         }
         System.out.println("trying to resolve " + variable + " in " + scope);
         Term term = scope.get(variable);
         if ( term instanceof Variable )
         {
             Variable termVariable = (Variable) term;
-            return startingScope.get(termVariable);
+            return startingScope.get( termVariable );
         }
         return term;
     }
