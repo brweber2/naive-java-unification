@@ -110,36 +110,49 @@ public class RuleSearch {
 
 //        UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(scope), question, rule.getHead() );
         UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(), question, rule.getHead() );
-        if ( headResult.getSuccess() == UnificationSuccess.YES )
+        UnificationResult baseResult = new UnificationResult();
+        UnificationResult finalResult = baseResult;
+        while ( headResult != null )
         {
-            System.out.println("head unified");
-            // now we have to see if all the conditions in body hold
-            UnificationResult bodyResult = unifyRuleBody( new UnificationScope( headResult.getUnifyScope() ), rule.getBody() );
-            if ( bodyResult.getSuccess() == UnificationSuccess.YES )
+            if ( headResult.getSuccess() == UnificationSuccess.YES )
             {
-                System.out.println("body unified, checking scopes...");
-                if ( consistent( scope, headResult.getUnifyScope(), bodyResult.getUnifyScope() ) )
+                System.out.println("head unified");
+                // now we have to see if all the conditions in body hold
+                UnificationResult bodyResult = unifyRuleBody( new UnificationScope( headResult.getUnifyScope() ), rule.getBody() );
+                while ( bodyResult != null )
                 {
-                    System.out.println("answered " + question + " with " + rule + " with scope " + scope);
-                    merge(scope,headResult.getUnifyScope(),bodyResult.getUnifyScope());
-                    return new UnificationResult( scope, question, rule.getBody() );
+                    if ( bodyResult.getSuccess() == UnificationSuccess.YES )
+                    {
+                        System.out.println("body unified, checking scopes...");
+                        if ( consistent( scope, headResult.getUnifyScope(), bodyResult.getUnifyScope() ) )
+                        {
+                            System.out.println("answered " + question + " with " + rule + " with scope " + scope);
+                            merge(scope,headResult.getUnifyScope(),bodyResult.getUnifyScope());
+                            finalResult = finalResult.next( new UnificationResult( scope, question, rule.getBody() ) );
+                        }
+                    }
+                    bodyResult = bodyResult.getNext();
                 }
+                System.out.println("unable to answer " + question + " with " + rule + " with scope " + scope);
             }
-            System.out.println("unable to answer " + question + " with " + rule + " with scope " + scope);
-            return new UnificationResult();
+            else
+            {
+                System.out.println("head did not unify");
+            }
+            headResult = headResult.getNext();
         }
-        else
+        if( baseResult != finalResult )
         {
-            System.out.println("head did not unify");
-            return headResult;
+            return baseResult.getNext();
         }
+        return baseResult;
     }
 
     private void merge( UnificationScope scope, UnificationScope headScope, UnificationScope bodyScope )
     {
         for ( Variable variable : headScope.keys() )
         {
-            Term term = headScope.get( variable );
+            Term term = headScope.grab( variable );
             if ( term == null )
             {
                 Term value = bodyScope.get( variable );
@@ -161,7 +174,7 @@ public class RuleSearch {
     {
         for ( Variable variable : headScope.keys() )
         {
-            Term term = headScope.get( variable );
+            Term term = headScope.grab( variable );
             if ( term == null )
             {
                 Term value = bodyScope.get( variable );

@@ -123,6 +123,31 @@ public class UnificationScope {
     {
         return scope.containsKey(variable) || (parent != null && parent.has(variable));
     }
+    
+    public Term grab(Variable variable)
+    {
+        return grabResolve( variable, this );
+    }
+
+    private Term grabResolve(Variable variable, UnificationScope startingScope)
+    {
+        if ( !scope.containsKey(variable) )
+        {
+            if ( parent == null )
+            {
+                return variable;
+            }
+            return parent.resolve( variable, startingScope );
+        }
+        System.out.println("trying to resolve " + variable + " in " + scope);
+        Term term = scope.get(variable);
+        if ( term instanceof Variable )
+        {
+            Variable termVariable = (Variable) term;
+            return startingScope.grab( termVariable );
+        }
+        return term;
+    }
 
     public Term get(Variable variable)
     {

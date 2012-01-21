@@ -33,6 +33,7 @@ public class RecursionTest {
         Unify unifier = new Unification();
         ProofSearch proofSearch = new ProofSearch(unifier,knowledgeBase);
 
+        // ?- is_digesting(mosquito,stork).
         UnificationResult unificationResult2 = proofSearch.ask( new ComplexTerm("is_digesting", new Atom("mosquito"), new Atom("stork")) );
 
         Assert.assertTrue( unificationResult2.getSuccess() == UnificationSuccess.NO );
@@ -47,8 +48,8 @@ public class RecursionTest {
         Assert.assertEquals(unificationResult.getScope().get(new Variable("X")), new Atom("stork") );
         Assert.assertTrue(unificationResult.getScope().has(new Variable("Y")));
         Assert.assertEquals(unificationResult.getScope().get(new Variable("Y")), new Atom("mosquito") );
-        Assert.assertTrue(unificationResult.getScope().has(new Variable("Z")));
-        Assert.assertEquals(unificationResult.getScope().get(new Variable("Z")), new Atom("frog") );
+//        Assert.assertTrue(unificationResult.getScope().has(new Variable("Z")));
+//        Assert.assertEquals(unificationResult.getScope().get(new Variable("Z")), new Atom("frog") );
         Assert.assertNull( unificationResult.getNext() );
 
     }
@@ -82,8 +83,8 @@ public class RecursionTest {
         Assert.assertEquals(unificationResult.getScope().get(new Variable("X")), new Atom("stork") );
         Assert.assertTrue(unificationResult.getScope().has(new Variable("Y")));
         Assert.assertEquals(unificationResult.getScope().get(new Variable("Y")), new Atom("mosquito") );
-        Assert.assertTrue(unificationResult.getScope().has(new Variable("Z")));
-        Assert.assertEquals(unificationResult.getScope().get(new Variable("Z")), new Atom("frog") );
+//        Assert.assertTrue(unificationResult.getScope().has(new Variable("Z")));
+//        Assert.assertEquals(unificationResult.getScope().get(new Variable("Z")), new Atom("frog") );
         Assert.assertNull( unificationResult.getNext() );
 
     }
