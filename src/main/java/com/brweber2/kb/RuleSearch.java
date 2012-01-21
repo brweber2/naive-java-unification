@@ -106,8 +106,9 @@ public class RuleSearch {
         // does the question unify with head?
 
         System.out.println("asking: " + question + " with rule: " + rule + " with scope: " + scope);
-        
-        UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(scope), question, rule.getHead() );
+
+//        UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(scope), question, rule.getHead() );
+        UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(), question, rule.getHead() );
         if ( headResult.getSuccess() == UnificationSuccess.YES )
         {
             System.out.println("head unified");

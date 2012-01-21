@@ -43,7 +43,6 @@ public class ComplexTerm implements Term  {
         return terms;
     }
 
-    @Override
     public String prettyPrint() {
         throw new RuntimeException("todo");
     }

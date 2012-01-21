@@ -1,11 +1,7 @@
 package com.brweber2.unification;
 
-import com.brweber2.term.Term;
 import com.brweber2.term.Variable;
 import com.brweber2.term.rule.RuleBody;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author brweber2
@@ -57,6 +53,7 @@ public class UnificationResult {
         return term2;
     }
 
+    @Override
     public String toString()
     {
         StringBuilder str = new StringBuilder();
@@ -65,7 +62,7 @@ public class UnificationResult {
             if ( !scope.isEmpty() )
             {
                 for (Variable variable : scope.keys()) {
-                    str.append(variable.prettyPrint() + ": " + scope.resolve(variable).prettyPrint() + "\n");
+                    str.append(variable.prettyPrint() + ": " + scope.get(variable).prettyPrint() + "\n");
                 }
             }
         }
