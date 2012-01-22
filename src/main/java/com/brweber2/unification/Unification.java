@@ -1,47 +1,50 @@
 package com.brweber2.unification;
 
+import com.brweber2.term.Atom;
+import com.brweber2.term.ComplexTerm;
+import com.brweber2.term.Numeric;
+import com.brweber2.term.Term;
+import com.brweber2.term.Variable;
+
 /**
  * @author brweber2
  * Copyright: 2012
  */
 public class Unification implements Unify {
-    @Override
+
     public UnificationResult unify(Term term1, Term term2) {
-        return unify(new UnificationResult(UnificationSuccess.YES),term1,term2);
+        return unify(new UnificationScope(),term1,term2);
     }
 
-    public UnificationResult unify(UnificationResult soFar, Term term1, Term term2) {
+    public UnificationResult unify(UnificationScope scope, Term term1, Term term2) {
+        boolean unified = false;
         if ( term1 instanceof Atom && term2 instanceof Atom )
         {
-            if ( ((Atom)term1).same( (Atom) term2 ) )
+            if ( ((Atom)term1).equals((Atom) term2) )
             {
-                return new UnificationResult(UnificationSuccess.YES);
+                unified = true;
             }
-            return new UnificationResult(UnificationSuccess.NO);
         }
         else if ( term1 instanceof Numeric && term2 instanceof Numeric )
         {
-            if ( ((Numeric)term1).same( (Numeric) term2 ) )
+            if ( ((Numeric)term1).equals((Numeric) term2) )
             {
-                return new UnificationResult(UnificationSuccess.YES);
+                unified = true;
             }
-            return new UnificationResult(UnificationSuccess.NO);
         }
-        else if ( term1 instanceof Variable ) 
+        else if ( term1 instanceof Variable)
         {
-            if ( soFar.set((Variable)term1, term2) == UnificationSuccess.YES )
+            if ( scope.set((Variable)term1, term2) )
             {
-                return soFar;
+                unified = true;
             }
-            return new UnificationResult( UnificationSuccess.NO );
         }
         else if ( term2 instanceof Variable )
         {
-            if ( soFar.set((Variable)term2, term1) == UnificationSuccess.YES )
+            if ( scope.set((Variable)term2, term1) )
             {
-                return soFar;
+                unified = true;
             }
-            return new UnificationResult( UnificationSuccess.NO );
         }
         else if ( term1 instanceof ComplexTerm && term2 instanceof ComplexTerm )
         {
@@ -51,23 +54,26 @@ public class Unification implements Unify {
             if ( a.sameFunctor(b) && a.sameArity(b) )
             {
                 // args unify
-                if ( argsUnify(soFar,a,b) )
+                if ( argsUnify(scope, a, b) )
                 {
                     // variables are compatible
-                    return soFar;
+                    unified = true;
                 }
             }
-            return new UnificationResult(UnificationSuccess.NO);
         }
-        else
+        if ( unified )
         {
-            return new UnificationResult(UnificationSuccess.NO);
+            System.out.println("successfully unified " + term1 + " and " + term2 + " with scope: " + scope);
+            return new UnificationResult( scope, term1, term2 );
         }
+        System.out.println("Unable to unify " + term1 + " and " + term2 + " with scope: " + scope);
+        // did NOT unify
+        return new UnificationResult();
     }
 
-    boolean argsUnify(UnificationResult soFar, ComplexTerm a, ComplexTerm b) {
+    boolean argsUnify(UnificationScope scope, ComplexTerm a, ComplexTerm b) {
         for (int i = 0; i < a.getArity(); i++ ) {
-            UnificationResult match = unify( soFar, a.getTerms().get(i), b.getTerms().get(i));
+            UnificationResult match = unify(scope, a.getTerms().get(i), b.getTerms().get(i));
             switch (match.getSuccess()) {
                 case YES:
                     break;
