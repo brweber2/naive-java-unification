@@ -7,14 +7,13 @@ import com.creativewidgetworks.goldparser.engine.ParserException;
 import com.creativewidgetworks.goldparser.engine.Reduction;
 import com.creativewidgetworks.goldparser.parser.ProcessRule;
 
-@ProcessRule(rule={"<Statement> ::= <Term> .",
-    "<Statement> ::= <Rule> ."})
+@ProcessRule( rule = "<RuleAnd> ::= <Term> ',' <RuleBody>" )
 
-public class StatementRuleHandler extends Reduction
+public class RuleAndRuleHandler extends Reduction
 {
     @Override
     public void execute() throws ParserException
     {
-        System.out.println("executing an atom!");
+        System.out.println( "executing an atom!" );
     }
 }
