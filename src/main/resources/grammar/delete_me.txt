@@ -1,0 +1,13 @@
+employee(chris).
+employee(dave).
+employee(jim).
+employee(bryan).
+employee(gary).
+
+boss(bryan,chris).
+boss(gary,chris).
+boss(jim,bryan).
+boss(dave,jim).
+
+is_boss(@X,@Y) :- boss(@X,@Y).
+is_boss(@X,@Y) :- boss(@X,@Z), is_boss(@Z,@Y).
