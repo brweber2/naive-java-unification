@@ -14,7 +14,7 @@ public class CompileGrammar
 {
     public static void main( String[] args ) throws IOException
     {
-        File grammarFile = new File("/Users/bweber/brweber2/naive-java-unification/src/main/resources/grammar/naive_java_unification.grm");
+        File grammarFile = new File("/Users/bweber/brweber2/naive-java-unification/src/main/resources/naive_java_unification.egt");
         File sourceFile = new File( "/Users/bweber/brweber2/naive-java-unification/src/main/resources/grammar/delete_me.txt" );
 
         System.out.println(grammarFile.exists());

@@ -7,10 +7,9 @@ import com.creativewidgetworks.goldparser.engine.ParserException;
 import com.creativewidgetworks.goldparser.engine.Reduction;
 import com.creativewidgetworks.goldparser.parser.ProcessRule;
 
-@ProcessRule(rule={"<Statements> ::= <Statement> <Statements>",
-"<Statements> ::= <Statement>"})
+@ProcessRule(rule="<Statement> ::= <Atom> .")
 
-public class StatementsRuleHandler extends Reduction
+public class StatementRuleHandler extends Reduction
 {
     @Override
     public void execute() throws ParserException

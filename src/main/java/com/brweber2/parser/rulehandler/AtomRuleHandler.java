@@ -10,7 +10,8 @@ import com.creativewidgetworks.goldparser.parser.GOLDParser;
 import com.creativewidgetworks.goldparser.parser.ProcessRule;
 import com.creativewidgetworks.goldparser.parser.Variable;
 
-@ProcessRule(rule="<Atom> ::= Id | {AtomLiteral}")
+@ProcessRule(rule={"<Atom> ::= Id",
+"<Atom> ::= AtomLiteral"})
 
 public class AtomRuleHandler extends Reduction
 {
