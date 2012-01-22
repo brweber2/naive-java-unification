@@ -6,49 +6,16 @@
 "Case Sensitive" = True
 "Start Symbol"   = <Statements>
 
-Comment Block @= { Nesting = All, Advance = Character }
-
-Comment Start = '/*'
-Comment End   = '*/'
-
-Comment Line  = '//'
-
 {AtomContent} = {Printable} - ['']
 
 Id            = {Letter}{AlphaNumeric}*
 
-! Atom string allows only single quotes
-
 AtomLiteral = ''   {AtomContent}* ''
 
-NumberLiteral = {Digit}+('.'{Digit}+)?
-
-<Statements>    ::=   Statement
+<Statements>    ::=   Atom
                     |
-
-<Statement>     ::=   Term
-                    | Rule
-
-<Term>          ::=   Atom
-                    | NumberLiteral
-                    | Variable
-                    | ComplexTerm
-
-<Rule>          ::=   RuleHead ':-' RuleBody
-
-<RuleHead>      ::=   Term
-
-<RuleBody>      ::=   RuleAnd
-                    | RuleOr
-                    | Term
-
-<RuleAnd>       ::=   RuleBody ',' RuleBody
-<RuleOr>        ::=   RuleBody ';' RuleBody
 
 <Atom>          ::=   Id
                     | {AtomLiteral}
 
-<Variable>      ::=   '@' Id
-
-<ComplexTerm>   ::=   Id '(' ComplexTerm* ')'
 
