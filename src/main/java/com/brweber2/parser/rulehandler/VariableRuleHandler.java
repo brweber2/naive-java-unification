@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 ARIN
+ * Copyright (C) 2012 brweber2
  */
 package com.brweber2.parser.rulehandler;
 
