@@ -39,6 +39,11 @@ public class ComplexTerm implements Term  {
         return arity;
     }
 
+    public String getFunctor()
+    {
+        return functor;
+    }
+
     public List<Term> getTerms() {
         return terms;
     }

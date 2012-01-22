@@ -16,6 +16,11 @@ public class Atom implements Term {
     public String prettyPrint() {
         return atom;
     }
+    
+    public String getRawString()
+    {
+        return atom;
+    }
 
     @Override
     public String toString() {

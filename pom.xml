@@ -15,6 +15,11 @@
             <version>1.0</version>
         </dependency>
         <dependency>
+            <groupId>jline</groupId>
+            <artifactId>jline</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.3.1</version>

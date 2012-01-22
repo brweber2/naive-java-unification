@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URISyntaxException;
 
 public class CompileGrammar
 {
@@ -35,5 +36,36 @@ public class CompileGrammar
         }
         parser.getCurrentReduction().execute();
         System.out.println(parser.getParseTree());
+    }
+
+    public GOLDParser parser()
+    {
+        try
+        {
+            return parser( new File( this.getClass().getClassLoader().getResource( "naive_java_unification.egt" ).toURI() ) );
+        }
+        catch ( URISyntaxException e )
+        {
+            throw new RuntimeException( "Unable to load the grammar file from the classpath.", e );
+        }
+    }
+    
+    public GOLDParser parser( File grammarFile )
+    {
+        try
+        {
+            GOLDParser parser = new GOLDParser();
+            if ( !parser.setup( grammarFile ) )
+            {
+                throw new RuntimeException( "Unable to parse the grammar file " + grammarFile.getAbsolutePath() );
+            }
+            parser.loadRuleHandlers( "com.brweber2.parser.rulehandler" );
+            parser.setGenerateTree( true );
+            return parser;
+        }
+        catch ( IOException e )
+        {
+            throw new RuntimeException( "Unable to load grammar file " + grammarFile.getAbsolutePath(), e );
+        }
     }
 }
