@@ -1,5 +1,5 @@
 # Naive Java Unification
-A super naive unification library written in Java.  This is based on Chapters 2-4 from "Learn Prolog Now!".
+A super naive unification library written in Java.  This is based on Chapters 1-4 from "Learn Prolog Now!".
 
 ## Syntax Differences with Prolog
 * Atoms and complex terms can start with either an uppercase or lowercase letter.
