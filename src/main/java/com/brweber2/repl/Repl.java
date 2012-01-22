@@ -50,7 +50,7 @@ public class Repl
         }
     }
     
-    private static Term parseString( String read )
+    private static Object parseString( String read )
     {
         GOLDParser parser = compiler.parser();
         if ( !parser.parseSourceStatements( new StringReader( read ) ) )
@@ -58,7 +58,7 @@ public class Repl
             throw new RuntimeException( "Unable to parse: [" + read + "]." );
         }
         parser.getCurrentReduction().execute();
-        return (Term) parser.getCurrentReduction().getValue().asObject();
+        return parser.getCurrentReduction().getValue().asObject();
     }
 
     private static boolean load( Term question )
@@ -114,61 +114,79 @@ public class Repl
     private static Object eval( String read )
     {
         // parse
-        Term question = parseString( read );
-        // eval
-        if ( switchMode( question ) )
+        Object s = parseString( read );
+        if ( s instanceof Term )
         {
-            switch ( mode )
+            Term question = (Term) s;
+            // eval
+            // todo add concept of repl functions and built in functions...
+            if ( switchMode( question ) )
             {
-                case ADD:
-                    mode = MODE.ASK;
-                    break;
-                case ASK:
-                    mode = MODE.ADD;
-                    break;
-            }
-        }
-        else if ( load(question) )
-        {
-            List toAdds = loadFile(question);
-            for ( Object o : toAdds )
-            {
-                if ( o instanceof Term )
+                switch ( mode )
                 {
-                    kb.fact( (Term) o );
-                }
-                else if ( o instanceof Rule )
-                {
-                    kb.rule( (Rule) o );
-                }
-                else
-                {
-                    throw new RuntimeException( "Unsupported item in file [" + o + "]." );
+                    case ADD:
+                        mode = MODE.ASK;
+                        break;
+                    case ASK:
+                        mode = MODE.ADD;
+                        break;
                 }
             }
-            return "loaded " + question;
-        }
-        else
-        {
-            switch ( mode )
+            else if ( load(question) )
             {
-                case ADD:
-                    if ( question instanceof Term )
+                List toAdds = loadFile(question);
+                for ( Object o : toAdds )
+                {
+                    if ( o instanceof Term )
                     {
-                        kb.fact( (Term) question );
+                        kb.fact( (Term) o );
                     }
-                    else if ( question instanceof Rule )
+                    else if ( o instanceof Rule )
                     {
-                        kb.rule( (Rule) question );
+                        kb.rule( (Rule) o );
                     }
                     else
                     {
-                        throw new RuntimeException( "Unknown type in add mode: " + question );
+                        throw new RuntimeException( "Unsupported item in file [" + o + "]." );
                     }
-                case ASK:
-                    return proofSearch.ask( question );
+                }
+                return "loaded " + question;
+            }
+            else
+            {
+                switch ( mode )
+                {
+                    case ADD:
+                        if ( question instanceof Term )
+                        {
+                            kb.fact( (Term) question );
+                        }
+                        else if ( question instanceof Rule )
+                        {
+                            kb.rule( (Rule) question );
+                        }
+                        else
+                        {
+                            throw new RuntimeException( "Unknown type in add mode: " + question );
+                        }
+                    case ASK:
+                        return proofSearch.ask( question );
+                }
             }
         }
+        else if ( s instanceof Rule )
+        {
+            switch ( mode )
+            {
+                case ADD:
+                    kb.rule( (Rule) s );
+                    break;
+                case ASK:
+                    return "You cannot specify rules in ASK mode.";
+            }
+        }
+         
+
         // fall through cases...
         return "";
     }
@@ -178,7 +196,7 @@ public class Repl
         switch ( mode )
         {
             case ADD:
-                return ":- ";
+                return "!- ";
             case ASK:
                 return "?- ";
         }
