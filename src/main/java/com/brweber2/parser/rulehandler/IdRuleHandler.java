@@ -3,6 +3,8 @@
  */
 package com.brweber2.parser.rulehandler;
 
+import com.brweber2.term.Atom;
+import com.creativewidgetworks.goldparser.engine.ParserException;
 import com.creativewidgetworks.goldparser.engine.Reduction;
 import com.creativewidgetworks.goldparser.parser.GOLDParser;
 import com.creativewidgetworks.goldparser.parser.ProcessRule;
@@ -12,16 +14,13 @@ import com.creativewidgetworks.goldparser.parser.Variable;
 
 public class IdRuleHandler extends Reduction
 {
-
-        private GOLDParser theParser;
-        private String variableName;
-
+    private Reduction id;
+    
         public IdRuleHandler(GOLDParser parser) {
-            theParser = parser;
             Reduction reduction = parser.getCurrentReduction();
             if (reduction != null) {
                 if (reduction.size() == 1) {
-                    variableName = reduction.get(0).asString();
+                    id = reduction.get( 0 ).asReduction();
                 } else {
                     parser.raiseParserException("boom");
                 }
@@ -30,20 +29,11 @@ public class IdRuleHandler extends Reduction
             }
         }
 
-        public String getVariableName() {
-            return variableName;
-        }
-
-        @Override
-        public Variable getValue() {
-            Variable var = theParser.getProgramVariable(variableName);
-            return var == null ? new Variable("") : var;
-        }
-
-        @Override
-        public String toString() {
-            return variableName + "=" + getValue();
-        }
-
-
+    @Override
+    public void execute() throws ParserException
+    {
+        System.out.println("executing an id!");
+        id.execute();
+        setValue( new Variable( new Atom( id.getValue().asString() ) ) );
+    }
 }

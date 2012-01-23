@@ -42,7 +42,12 @@ public class CompileGrammar
     {
         try
         {
-            return parser( new File( this.getClass().getClassLoader().getResource( "naive_java_unification.egt" ).toURI() ) );
+            File f = new File( this.getClass().getClassLoader().getResource( "naive_java_unification.egt" ).toURI() );
+            if ( !f.exists() )
+            {
+                throw new RuntimeException( "No such egt file." );
+            }
+            return parser( f );
         }
         catch ( URISyntaxException e )
         {
@@ -52,20 +57,6 @@ public class CompileGrammar
     
     public GOLDParser parser( File grammarFile )
     {
-        try
-        {
-            GOLDParser parser = new GOLDParser();
-            if ( !parser.setup( grammarFile ) )
-            {
-                throw new RuntimeException( "Unable to parse the grammar file " + grammarFile.getAbsolutePath() );
-            }
-            parser.loadRuleHandlers( "com.brweber2.parser.rulehandler" );
-            parser.setGenerateTree( true );
-            return parser;
-        }
-        catch ( IOException e )
-        {
-            throw new RuntimeException( "Unable to load grammar file " + grammarFile.getAbsolutePath(), e );
-        }
+        return new GOLDParser(grammarFile,"com.brweber2.parser.rulehandler",false);
     }
 }

@@ -15,17 +15,25 @@ import com.creativewidgetworks.goldparser.parser.Variable;
 
 public class AtomRuleHandler extends Reduction
 {
+    
     public AtomRuleHandler(GOLDParser parser) {
-        String atom = parser.getCurrentReduction().get(0).asString();
-
-        // todo if the single quotes are there, remove them...
-        
-        setValue( new Variable( new Atom( atom ) ) );
+        Reduction reduction = parser.getCurrentReduction();
+        if (reduction != null) {
+            if (reduction.size() == 1) {
+                setValue( new Variable( new Atom(reduction.get( 0 ).asString() ) ) );
+            } else {
+                parser.raiseParserException("wrong number of args");
+            }
+        } else {
+            parser.raiseParserException("no reduction");
+        }
     }
 
     @Override
     public void execute() throws ParserException
     {
         System.out.println("executing an atom!");
+        System.out.println(getValue());
+        System.out.println(getValue().asObject());
     }
 }

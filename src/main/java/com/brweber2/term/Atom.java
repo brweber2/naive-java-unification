@@ -12,7 +12,6 @@ public class Atom implements Term {
         this.atom = atom;
     }
 
-    @Override
     public String prettyPrint() {
         return atom;
     }

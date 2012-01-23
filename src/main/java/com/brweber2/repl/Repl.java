@@ -185,7 +185,10 @@ public class Repl
                     return "You cannot specify rules in ASK mode.";
             }
         }
-         
+        else
+        {
+            throw new RuntimeException( "meh" );
+        }
 
         // fall through cases...
         return "";
