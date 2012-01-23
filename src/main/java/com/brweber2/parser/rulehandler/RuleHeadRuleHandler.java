@@ -12,12 +12,14 @@ import com.creativewidgetworks.goldparser.parser.ProcessRule;
 
 public class RuleHeadRuleHandler extends Reduction
 {
+    Reduction term;
+
     public RuleHeadRuleHandler(GOLDParser parser)
     {
         Reduction reduction = parser.getCurrentReduction();
         if (reduction != null) {
             if (reduction.size() == 1) {
-                setValue( reduction.get( 0 ).asReduction().getValue() );
+                term = reduction.get( 0 ).asReduction();
             } else {
                 parser.raiseParserException("wrong number of args");
             }
@@ -30,5 +32,7 @@ public class RuleHeadRuleHandler extends Reduction
     public void execute() throws ParserException
     {
 //        System.out.println("executing an atom!");
+        term.execute();
+        setValue( term.getValue() );
     }
 }

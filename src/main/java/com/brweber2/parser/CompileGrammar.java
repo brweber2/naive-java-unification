@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URISyntaxException;
+import java.util.List;
 
 public class CompileGrammar
 {
@@ -57,6 +58,12 @@ public class CompileGrammar
     
     public GOLDParser parser( File grammarFile )
     {
-        return new GOLDParser(grammarFile,"com.brweber2.parser.rulehandler",false);
+        GOLDParser parser = new GOLDParser(grammarFile,"com.brweber2.parser.rulehandler",false);
+        List<String> errors = parser.validateHandlersExist();
+        if ( !errors.isEmpty() )
+        {
+            throw new RuntimeException( "Missing handlers!" + errors );
+        }
+        return parser;
     }
 }

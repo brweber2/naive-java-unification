@@ -39,14 +39,23 @@ public class Repl
         boolean done = false;
         while ( !done )
         {
-            String read = read(in);
-            if ( done(read) )
+            try
             {
-                done = true;
-                continue;
+                String read = read(in);
+                if ( done(read) )
+                {
+                    done = true;
+                    continue;
+                }
+                Object result = eval(read);
+                print(result);
             }
-            Object result = eval(read);
-            print(result);
+            catch ( Exception e )
+            {
+                System.err.println( "Error: " + e.getMessage() );
+                System.err.flush();
+                System.out.flush();
+            }
         }
     }
     
