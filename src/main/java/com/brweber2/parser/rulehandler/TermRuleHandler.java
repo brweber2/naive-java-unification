@@ -34,9 +34,9 @@ public class TermRuleHandler extends Reduction
     @Override
     public void execute() throws ParserException
     {
-        System.out.println("executing a term!");
+//        System.out.println("executing a term!");
         term.execute();
-        System.out.println("term value: " + term.getValue());
+//        System.out.println("term value: " + term.getValue());
         setValue( term.getValue() );
     }
 }

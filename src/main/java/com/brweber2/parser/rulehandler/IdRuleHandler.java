@@ -32,7 +32,7 @@ public class IdRuleHandler extends Reduction
     @Override
     public void execute() throws ParserException
     {
-        System.out.println("executing an id!");
+//        System.out.println("executing an id!");
         id.execute();
         setValue( new Variable( new Atom( id.getValue().asString() ) ) );
     }

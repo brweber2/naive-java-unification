@@ -32,6 +32,6 @@ public class RuleOrRuleHandler extends Reduction
     @Override
     public void execute() throws ParserException
     {
-        System.out.println("executing an atom!");
+//        System.out.println("executing an atom!");
     }
 }

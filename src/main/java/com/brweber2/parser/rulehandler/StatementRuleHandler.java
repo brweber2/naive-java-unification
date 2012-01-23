@@ -32,9 +32,9 @@ public class StatementRuleHandler extends Reduction
     @Override
     public void execute() throws ParserException
     {
-        System.out.println("executing a statement!");
+//        System.out.println("executing a statement!");
         ruleOrTerm.execute();
-        System.out.println("statement value: " + ruleOrTerm.getValue());
+//        System.out.println("statement value: " + ruleOrTerm.getValue());
         setValue( ruleOrTerm.getValue() );
     }
 }

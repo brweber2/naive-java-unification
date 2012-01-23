@@ -118,6 +118,7 @@ public class Repl
         if ( s instanceof Term )
         {
             Term question = (Term) s;
+            System.out.println("we have term " + question);
             // eval
             // todo add concept of repl functions and built in functions...
             if ( switchMode( question ) )
@@ -134,6 +135,7 @@ public class Repl
             }
             else if ( load(question) )
             {
+                System.out.println("time to load a file...");
                 List toAdds = loadFile(question);
                 for ( Object o : toAdds )
                 {
@@ -157,18 +159,9 @@ public class Repl
                 switch ( mode )
                 {
                     case ADD:
-                        if ( question instanceof Term )
-                        {
-                            kb.fact( (Term) question );
-                        }
-                        else if ( question instanceof Rule )
-                        {
-                            kb.rule( (Rule) question );
-                        }
-                        else
-                        {
-                            throw new RuntimeException( "Unknown type in add mode: " + question );
-                        }
+                        kb.fact( question );
+                        System.out.println("added fact " + question);
+                        break;
                     case ASK:
                         return proofSearch.ask( question );
                 }
@@ -176,10 +169,12 @@ public class Repl
         }
         else if ( s instanceof Rule )
         {
+            System.out.println("we have rule " + s);
             switch ( mode )
             {
                 case ADD:
                     kb.rule( (Rule) s );
+                    System.out.println("added rule: " + s);
                     break;
                 case ASK:
                     return "You cannot specify rules in ASK mode.";

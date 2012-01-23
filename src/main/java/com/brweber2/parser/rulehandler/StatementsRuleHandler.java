@@ -42,14 +42,14 @@ public class StatementsRuleHandler extends Reduction
     @Override
     public void execute() throws ParserException
     {
-        System.out.println("executing statements!");
+//        System.out.println("executing statements!");
         statement.execute();
-        System.out.println("statement value: " + statement.getValue());
+//        System.out.println("statement value: " + statement.getValue());
         setValue( statement.getValue() );
         if ( statements != null )
         {
             statements.execute();
-            System.out.println("statements value: " + statements.getValue());
+//            System.out.println("statements value: " + statements.getValue());
             setValue( statements.getValue() );
         }
     }

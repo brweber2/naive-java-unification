@@ -19,22 +19,18 @@ import java.util.List;
 
 public class ComplexTermRuleHandler extends Reduction
 {
+    String id;
+    Reduction termList;
 
     public ComplexTermRuleHandler(GOLDParser parser)
     {
         Reduction reduction = parser.getCurrentReduction();
         if (reduction != null) {
             if (reduction.size() == 3) {
-                setValue( new Variable( new ComplexTerm( reduction.get( 0 ).asString() ) ) );
+                id = reduction.get( 0 ).asString();
             } else if (reduction.size() > 3 ) {
-                int startAt = 2;
-                int endAt = reduction.size() - 2; // -1 b/c zero indexed and -1 for ')'
-                List<Term> terms = new ArrayList<Term>(  );
-                for ( int i = startAt; i < endAt; i++ )
-                {
-                    terms.add( (Term) reduction.get( i ).asReduction().getValue() );
-                }
-                setValue( new Variable(  new ComplexTerm( reduction.get( 0 ).asString(), terms.toArray( new Term[terms.size()] ) ) ) );
+                id = reduction.get( 0 ).asString();
+                termList = reduction.get( 2 ).asReduction();
             } else {
                 parser.raiseParserException("wrong number of args");
             }
@@ -46,6 +42,17 @@ public class ComplexTermRuleHandler extends Reduction
     @Override
     public void execute() throws ParserException
     {
-        System.out.println("executing an atom!");
+//        System.out.println("executing an atom!");
+        List<Term> terms;
+        if ( termList != null )
+        {
+            termList.execute();
+            terms = (List<Term>) termList.getValue().asObject();
+        }
+        else
+        {
+            terms = new ArrayList<Term>();
+        }
+        setValue( new Variable( new ComplexTerm( id, (Term[]) terms.toArray( new Term[terms.size()] ) ) ) );
     }
 }
