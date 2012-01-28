@@ -8,6 +8,7 @@ import com.creativewidgetworks.goldparser.parser.GOLDParser;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -44,22 +45,15 @@ public class CompileGrammar
 
     public GOLDParser parser()
     {
-        try
-        {
-            File f = new File( this.getClass().getClassLoader().getResource( "naive_java_unification.egt" ).toURI() );
-            if ( !f.exists() )
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("naive_java_unification.egt");
+            if ( inputStream == null )
             {
                 throw new RuntimeException( "No such egt file." );
             }
-            return parser( f );
-        }
-        catch ( URISyntaxException e )
-        {
-            throw new RuntimeException( "Unable to load the grammar file from the classpath.", e );
-        }
+            return parser( inputStream );
     }
     
-    public GOLDParser parser( File grammarFile )
+    public GOLDParser parser( InputStream grammarFile )
     {
         GOLDParser parser = new GOLDParser(grammarFile,"com.brweber2.parser.rulehandler",false);
         List<String> errors = parser.validateHandlersExist();
