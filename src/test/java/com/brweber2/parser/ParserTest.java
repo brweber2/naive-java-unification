@@ -1,6 +1,5 @@
 package com.brweber2.parser;
 
-import com.brweber2.parser.rulehandler.AtomContentRuleHandler;
 import com.brweber2.term.Atom;
 import com.brweber2.term.ComplexTerm;
 import com.brweber2.term.Numeric;

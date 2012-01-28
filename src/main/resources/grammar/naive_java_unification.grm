@@ -32,7 +32,7 @@ NumberLiteral = {Digit}+('.'{Digit}+)?
                     | <Rule> '.'
 
 <Term>          ::=   <Atom>
-                    | NumberLiteral
+                    | <Number>
                     | <Variable>
                     | <ComplexTerm>
 
@@ -47,6 +47,8 @@ NumberLiteral = {Digit}+('.'{Digit}+)?
 <RuleAnd>       ::=   <Term> ',' <RuleBody>
                  
 <RuleOr>        ::=   <Term> ';' <RuleBody>
+
+<Number>        ::=   NumberLiteral
 
 <Atom>          ::=   Id
                     | AtomLiteral
