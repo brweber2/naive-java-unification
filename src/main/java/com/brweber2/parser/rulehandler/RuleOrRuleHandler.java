@@ -15,12 +15,16 @@ import com.creativewidgetworks.goldparser.parser.Variable;
 
 public class RuleOrRuleHandler extends Reduction
 {
+    private Reduction left;
+    private Reduction right;
+
     public RuleOrRuleHandler(GOLDParser parser)
     {
         Reduction reduction = parser.getCurrentReduction();
         if (reduction != null) {
             if (reduction.size() == 3) {
-                setValue( new Variable( new RuleOr( (RuleBody)reduction.get( 0 ).asReduction().getValue(), (RuleBody) reduction.get( 2 ).asReduction().getValue() ) ) );
+                left = reduction.get(0).asReduction();
+                right = reduction.get(2).asReduction();
             } else {
                 parser.raiseParserException("wrong number of args");
             }
@@ -32,6 +36,8 @@ public class RuleOrRuleHandler extends Reduction
     @Override
     public void execute() throws ParserException
     {
-//        System.out.println("executing an atom!");
+        left.execute();
+        right.execute();
+        setValue( new Variable( new RuleOr( (RuleBody)left.getValue().asObject(), (RuleBody) right.getValue().asObject() ) ) );
     }
 }

@@ -37,7 +37,6 @@ public class RuleRuleHandler extends Reduction
     @Override
     public void execute() throws ParserException
     {
-//        System.out.println("executing a rule!");
         head.execute();
         body.execute();
         Object headValue = head.getValue().asObject();
