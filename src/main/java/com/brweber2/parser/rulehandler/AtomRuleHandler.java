@@ -20,7 +20,11 @@ public class AtomRuleHandler extends Reduction
         Reduction reduction = parser.getCurrentReduction();
         if (reduction != null) {
             if (reduction.size() == 1) {
-                setValue( new Variable( new Atom(reduction.get( 0 ).asString() ) ) );
+                String atomString = reduction.get( 0 ).asString();
+                if ( atomString.startsWith("'") && atomString.endsWith("'")){
+                    atomString = atomString.substring(1,atomString.length()-1);
+                }
+                setValue( new Variable( new Atom( atomString ) ) );
             } else {
                 parser.raiseParserException("wrong number of args");
             }

@@ -31,7 +31,7 @@ public class ParserTest {
     public void parseQuotedTerm()
     {
         String source = "'How about that?' .";
-        Atom expected = new Atom("'How about that?'");
+        Atom expected = new Atom("How about that?");
 
         Atom atom = parseForMe(Atom.class,source);
         Assert.assertEquals(atom,expected);
