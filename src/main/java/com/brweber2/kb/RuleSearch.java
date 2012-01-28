@@ -10,12 +10,16 @@ import com.brweber2.unification.UnificationResult;
 import com.brweber2.unification.UnificationScope;
 import com.brweber2.unification.UnificationSuccess;
 
+import java.util.logging.Logger;
+
 /**
  * @author brweber2
  *         Copyright: 2012
  */
 public class RuleSearch {
 
+    private static final Logger log = Logger.getLogger(RuleSearch.class.getName());
+    
     private ProofSearch proofSearch;
 
     public RuleSearch(ProofSearch proofSearch) {
@@ -51,10 +55,10 @@ public class RuleSearch {
             }
             if ( finalResult != currentResult )
             {
-                System.out.println("unified and rule " + ruleBody + " with scope: " + scope );
+                log.info("unified and rule " + ruleBody + " with scope: " + scope );
                 return finalResult.getNext();
             }
-            System.out.println("Unable to unify and rule " + ruleBody + " with scope: " + scope);
+            log.info("Unable to unify and rule " + ruleBody + " with scope: " + scope);
             return finalResult;
         }
         else if ( ruleBody instanceof RuleOr )
@@ -87,10 +91,10 @@ public class RuleSearch {
             }
             if ( finalResult != currentResult )
             {
-                System.out.println("unified or rule " + ruleBody + " with scope: " + scope );
+                log.info("unified or rule " + ruleBody + " with scope: " + scope );
                 return finalResult.getNext();
             }
-            System.out.println("Unable to unify or rule " + ruleBody + " with scope: " + scope);
+            log.info("Unable to unify or rule " + ruleBody + " with scope: " + scope);
             return finalResult;
         }
         else
@@ -106,7 +110,7 @@ public class RuleSearch {
     public UnificationResult ask(UnificationScope scope, Term question, Rule rule) {
         // does the question unify with head?
 
-        System.out.println("asking: " + question + " with rule: " + rule + " with scope: " + scope);
+        log.info("asking: " + question + " with rule: " + rule + " with scope: " + scope);
 
 //        UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(scope), question, rule.getHead() );
         UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(), question, rule.getHead() );
@@ -116,28 +120,28 @@ public class RuleSearch {
         {
             if ( headResult.getSuccess() == UnificationSuccess.YES )
             {
-                System.out.println("head unified");
+                log.fine("head unified");
                 // now we have to see if all the conditions in body hold
                 UnificationResult bodyResult = unifyRuleBody( new UnificationScope( headResult.getUnifyScope() ), rule.getBody() );
                 while ( bodyResult != null )
                 {
                     if ( bodyResult.getSuccess() == UnificationSuccess.YES )
                     {
-                        System.out.println("body unified, checking scopes...");
+                        log.fine("body unified, checking scopes...");
                         if ( consistent( scope, headResult.getUnifyScope(), bodyResult.getUnifyScope() ) )
                         {
-                            System.out.println("answered " + question + " with " + rule + " with scope " + scope);
+                            log.fine("answered " + question + " with " + rule + " with scope " + scope);
                             merge(scope,headResult.getUnifyScope(),bodyResult.getUnifyScope());
                             finalResult = finalResult.next( new UnificationResult( scope, question, rule.getBody() ) );
                         }
                     }
                     bodyResult = bodyResult.getNext();
                 }
-                System.out.println("unable to answer " + question + " with " + rule + " with scope " + scope);
+                log.info("unable to answer " + question + " with " + rule + " with scope " + scope);
             }
             else
             {
-                System.out.println("head did not unify");
+                log.info("head did not unify");
             }
             headResult = headResult.getNext();
         }

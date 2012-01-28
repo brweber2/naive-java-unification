@@ -68,6 +68,12 @@ public class UnificationResult {
         }
         str.append(success.name().toLowerCase());
         str.append("\n");
+        
+        if ( next != null )
+        {
+            str.append(next.toString());
+        }
+        
         return str.toString();
     }
 

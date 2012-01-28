@@ -11,16 +11,19 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class CompileGrammar
 {
+    private static final Logger log = Logger.getLogger(CompileGrammar.class.getName());
+    
     public static void main( String[] args ) throws IOException
     {
         File grammarFile = new File("/Users/bweber/brweber2/naive-java-unification/src/main/resources/naive_java_unification.egt");
         File sourceFile = new File( "/Users/bweber/brweber2/naive-java-unification/src/main/resources/grammar/delete_me.txt" );
 
-        System.out.println(grammarFile.exists());
-        System.out.println(sourceFile.exists());
+        log.finer("" + grammarFile.exists());
+        log.finer("" + sourceFile.exists());
 
         Reader sourceReader = new FileReader( sourceFile );
         GOLDParser parser = new GOLDParser();
@@ -30,13 +33,13 @@ public class CompileGrammar
         }
         parser.loadRuleHandlers( "com.brweber2.parser.rulehandler" );
         parser.setGenerateTree( true );
-        System.out.println("errors:" + parser.validateHandlersExist());
+        log.warning("errors:" + parser.validateHandlersExist());
         if ( !parser.parseSourceStatements( sourceReader ) )
         {
             throw new RuntimeException( "Unable to parse the source file " + sourceFile.getAbsolutePath() );
         }
         parser.getCurrentReduction().execute();
-        System.out.println(parser.getParseTree());
+        log.info(parser.getParseTree());
     }
 
     public GOLDParser parser()

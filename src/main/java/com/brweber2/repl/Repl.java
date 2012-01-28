@@ -13,6 +13,7 @@ import com.brweber2.term.rule.Rule;
 import com.brweber2.unification.Unification;
 import com.brweber2.unification.Unify;
 import com.creativewidgetworks.goldparser.parser.GOLDParser;
+import com.sun.xml.internal.bind.v2.model.runtime.RuntimeElementPropertyInfo;
 import jline.ConsoleReader;
 
 import java.io.File;
@@ -21,9 +22,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Repl
 {
+    private static Logger log = Logger.getLogger(Repl.class.getName());
+    
     private static final KnowledgeBase kb = new KnowledgeBase();
     private static final Unify unifier = new Unification();
     private static final ProofSearch proofSearch = new ProofSearch( unifier, kb );
@@ -127,7 +132,7 @@ public class Repl
         if ( s instanceof Term )
         {
             Term question = (Term) s;
-            System.out.println("we have term " + question);
+            log.fine("we have term " + question);
             // eval
             // todo add concept of repl functions and built in functions...
             if ( switchMode( question ) )
@@ -144,7 +149,7 @@ public class Repl
             }
             else if ( load(question) )
             {
-                System.out.println("time to load a file...");
+                log.fine("time to load a file...");
                 List toAdds = loadFile(question);
                 for ( Object o : toAdds )
                 {
@@ -169,7 +174,7 @@ public class Repl
                 {
                     case ADD:
                         kb.fact( question );
-                        System.out.println("added fact " + question);
+                        log.info("added fact " + question);
                         break;
                     case ASK:
                         return proofSearch.ask( question );
@@ -178,12 +183,12 @@ public class Repl
         }
         else if ( s instanceof Rule )
         {
-            System.out.println("we have rule " + s);
+            log.fine("we have rule " + s);
             switch ( mode )
             {
                 case ADD:
                     kb.rule( (Rule) s );
-                    System.out.println("added rule: " + s);
+                    log.info("added rule: " + s);
                     break;
                 case ASK:
                     return "You cannot specify rules in ASK mode.";

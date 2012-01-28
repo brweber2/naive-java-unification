@@ -7,12 +7,16 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * @author brweber2
  *         Copyright: 2012
  */
 public class UnificationScope {
+    
+    private static Logger log = Logger.getLogger(UnificationScope.class.getName());
+    
     private UnificationScope parent;
     private Map<Variable,Term> scope = new LinkedHashMap<Variable, Term>();
 
@@ -26,7 +30,7 @@ public class UnificationScope {
 
     public boolean set(Variable term1, Term value)
     {
-        System.out.println("trying to set " + term1 + " to " + value);
+        log.fine("trying to set " + term1 + " to " + value);
         if ( has(term1) )
         {
             Term existingValue = get(term1);
@@ -139,7 +143,7 @@ public class UnificationScope {
             }
             return parent.resolve( variable, startingScope );
         }
-        System.out.println("trying to resolve " + variable + " in " + scope);
+        log.fine("trying to resolve " + variable + " in " + scope);
         Term term = scope.get(variable);
         if ( term instanceof Variable )
         {
@@ -164,7 +168,7 @@ public class UnificationScope {
             }
             return parent.resolve( variable, startingScope );
         }
-        System.out.println("trying to resolve " + variable + " in " + scope);
+        log.fine("trying to resolve " + variable + " in " + scope);
         Term term = scope.get(variable);
         if ( term instanceof Variable )
         {

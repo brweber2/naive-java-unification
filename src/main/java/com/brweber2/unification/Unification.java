@@ -6,12 +6,16 @@ import com.brweber2.term.Numeric;
 import com.brweber2.term.Term;
 import com.brweber2.term.Variable;
 
+import java.util.logging.Logger;
+
 /**
  * @author brweber2
  * Copyright: 2012
  */
 public class Unification implements Unify {
 
+    private static Logger log = Logger.getLogger(Unification.class.getName());
+    
     public UnificationResult unify(Term term1, Term term2) {
         return unify(new UnificationScope(),term1,term2);
     }
@@ -63,10 +67,10 @@ public class Unification implements Unify {
         }
         if ( unified )
         {
-            System.out.println("successfully unified " + term1 + " and " + term2 + " with scope: " + scope);
+            log.info("successfully unified " + term1 + " and " + term2 + " with scope: " + scope);
             return new UnificationResult( scope, term1, term2 );
         }
-        System.out.println("Unable to unify " + term1 + " and " + term2 + " with scope: " + scope);
+        log.info("Unable to unify " + term1 + " and " + term2 + " with scope: " + scope);
         // did NOT unify
         return new UnificationResult();
     }

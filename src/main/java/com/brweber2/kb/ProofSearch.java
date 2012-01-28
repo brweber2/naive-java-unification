@@ -7,12 +7,16 @@ import com.brweber2.unification.UnificationScope;
 import com.brweber2.unification.UnificationSuccess;
 import com.brweber2.unification.Unify;
 
+import java.util.logging.Logger;
+
 /**
  * @author brweber2
  *         Copyright: 2012
  */
 public class ProofSearch {
 
+    private static Logger log = Logger.getLogger(ProofSearch.class.getName());
+    
     private Unify unifier;
     private KnowledgeBase knowledgeBase;
     private RuleSearch ruleSearch;
@@ -54,10 +58,10 @@ public class ProofSearch {
         }
         if ( baseResult == result )
         {
-            System.out.println("unable to answer " + question + " with scope: " + scope);
+            log.info("unable to answer " + question + " with scope: " + scope);
             return baseResult;
         }
-        System.out.println("answered " + question + " with scope: " + scope);
+        log.info("answered " + question + " with scope: " + scope);
         return baseResult.getNext();
     }
 
