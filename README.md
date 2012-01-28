@@ -6,7 +6,6 @@ A super naive unification library written in Java.  This is based on Chapters 1-
 * Variables are prefixed with '@' (i.e. @foo).
 
 ## In progress work (i.e. incomplete)
-* The parser is incomplete.  Rules are currently not parsing properly.
 * Loading terms and rules from files is not functioning currently.  They must be loaded via the repl.
 
 ## Work that hasn't started yet
