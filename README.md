@@ -19,28 +19,42 @@ A super naive unification library written in Java.  This is based on Chapters 1-
 * There is no (and there is no plan to) support for cut.
 
 ## How do I build it?
+
 ### To build via maven
+
 #### First build my fork of goldengine parser
-* cd <dir>
+
+* cd *dir*
 * git clone https://github.com/brweber2/goldengine.git
 * cd goldengine
 * mvn clean install
+
 #### Then build naive java unification
-* cd <dir>
+
+* cd *dir*
 * git clone https://github.com/brweber2/naive-java-unification.git
 * cd naive-java-unification
 * mvn clean install
 
 ## How do I run it?
+
 ### To run programmatically via Java
+
 * Construct a knowledge base and use a ProofSearch to query it
 * A tutorial will be added at a later date, see the unit tests for examples today.
+
 ### To run via the repl
+
 * java -jar target/unification-1.0.jar
+
 ## What can I do in the REPL?
+
 ### mode().
+
 * This toggles you back and forth between assert mode and query mode.
 * Assert mode has '!-' as its prompt and query mode uses '?-' as its prompt.
+
 ### exit, quit or halt
+
 * Exits the REPL
 
