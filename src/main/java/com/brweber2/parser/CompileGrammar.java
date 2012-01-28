@@ -59,8 +59,7 @@ public class CompileGrammar
         List<String> errors = parser.validateHandlersExist();
         if ( !errors.isEmpty() )
         {
-//            throw new RuntimeException( "Missing handlers!" + errors );
-            throw new RuntimeException( "Missing handlers!"  );
+            throw new RuntimeException( "Missing handlers!" + errors );
         }
         return parser;
     }
