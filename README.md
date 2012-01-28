@@ -21,12 +21,12 @@ A super naive unification library written in Java.  This is based on Chapters 1-
 ## How do I build it?
 ### To build via maven
 #### First build my fork of goldengine parser
-* cd <code>
+* cd <dir>
 * git clone https://github.com/brweber2/goldengine.git
 * cd goldengine
 * mvn clean install
 #### Then build naive java unification
-* cd <code>
+* cd <dir>
 * git clone https://github.com/brweber2/naive-java-unification.git
 * cd naive-java-unification
 * mvn clean install
