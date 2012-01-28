@@ -55,10 +55,10 @@ public class RuleSearch {
             }
             if ( finalResult != currentResult )
             {
-                log.info("unified and rule " + ruleBody + " with scope: " + scope );
+                log.fine("unified and rule " + ruleBody + " with scope: " + scope );
                 return finalResult.getNext();
             }
-            log.info("Unable to unify and rule " + ruleBody + " with scope: " + scope);
+            log.fine("Unable to unify and rule " + ruleBody + " with scope: " + scope);
             return finalResult;
         }
         else if ( ruleBody instanceof RuleOr )
@@ -91,10 +91,10 @@ public class RuleSearch {
             }
             if ( finalResult != currentResult )
             {
-                log.info("unified or rule " + ruleBody + " with scope: " + scope );
+                log.fine("unified or rule " + ruleBody + " with scope: " + scope );
                 return finalResult.getNext();
             }
-            log.info("Unable to unify or rule " + ruleBody + " with scope: " + scope);
+            log.fine("Unable to unify or rule " + ruleBody + " with scope: " + scope);
             return finalResult;
         }
         else
@@ -110,7 +110,7 @@ public class RuleSearch {
     public UnificationResult ask(UnificationScope scope, Term question, Rule rule) {
         // does the question unify with head?
 
-        log.info("asking: " + question + " with rule: " + rule + " with scope: " + scope);
+        log.fine("asking: " + question + " with rule: " + rule + " with scope: " + scope);
 
 //        UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(scope), question, rule.getHead() );
         UnificationResult headResult = proofSearch.getUnifier().unify(new UnificationScope(), question, rule.getHead() );
@@ -120,28 +120,28 @@ public class RuleSearch {
         {
             if ( headResult.getSuccess() == UnificationSuccess.YES )
             {
-                log.fine("head unified");
+                log.finer("head unified");
                 // now we have to see if all the conditions in body hold
                 UnificationResult bodyResult = unifyRuleBody( new UnificationScope( headResult.getUnifyScope() ), rule.getBody() );
                 while ( bodyResult != null )
                 {
                     if ( bodyResult.getSuccess() == UnificationSuccess.YES )
                     {
-                        log.fine("body unified, checking scopes...");
+                        log.finer("body unified, checking scopes...");
                         if ( consistent( scope, headResult.getUnifyScope(), bodyResult.getUnifyScope() ) )
                         {
-                            log.fine("answered " + question + " with " + rule + " with scope " + scope);
+                            log.finer("answered " + question + " with " + rule + " with scope " + scope);
                             merge(scope,headResult.getUnifyScope(),bodyResult.getUnifyScope());
                             finalResult = finalResult.next( new UnificationResult( scope, question, rule.getBody() ) );
                         }
                     }
                     bodyResult = bodyResult.getNext();
                 }
-                log.info("unable to answer " + question + " with " + rule + " with scope " + scope);
+                log.fine("unable to answer " + question + " with " + rule + " with scope " + scope);
             }
             else
             {
-                log.info("head did not unify");
+                log.fine("head did not unify");
             }
             headResult = headResult.getNext();
         }

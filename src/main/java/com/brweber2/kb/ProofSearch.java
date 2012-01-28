@@ -58,10 +58,10 @@ public class ProofSearch {
         }
         if ( baseResult == result )
         {
-            log.info("unable to answer " + question + " with scope: " + scope);
+            log.fine("unable to answer " + question + " with scope: " + scope);
             return baseResult;
         }
-        log.info("answered " + question + " with scope: " + scope);
+        log.fine("answered " + question + " with scope: " + scope);
         return baseResult.getNext();
     }
 

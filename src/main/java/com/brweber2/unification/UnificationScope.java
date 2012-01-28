@@ -30,7 +30,7 @@ public class UnificationScope {
 
     public boolean set(Variable term1, Term value)
     {
-        log.fine("trying to set " + term1 + " to " + value);
+        log.finer("trying to set " + term1 + " to " + value);
         if ( has(term1) )
         {
             Term existingValue = get(term1);
@@ -143,7 +143,7 @@ public class UnificationScope {
             }
             return parent.resolve( variable, startingScope );
         }
-        log.fine("trying to resolve " + variable + " in " + scope);
+        log.finer("trying to resolve " + variable + " in " + scope);
         Term term = scope.get(variable);
         if ( term instanceof Variable )
         {
@@ -168,7 +168,7 @@ public class UnificationScope {
             }
             return parent.resolve( variable, startingScope );
         }
-        log.fine("trying to resolve " + variable + " in " + scope);
+        log.finer("trying to resolve " + variable + " in " + scope);
         Term term = scope.get(variable);
         if ( term instanceof Variable )
         {

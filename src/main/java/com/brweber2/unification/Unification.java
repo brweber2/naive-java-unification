@@ -67,10 +67,10 @@ public class Unification implements Unify {
         }
         if ( unified )
         {
-            log.info("successfully unified " + term1 + " and " + term2 + " with scope: " + scope);
+            log.fine("successfully unified " + term1 + " and " + term2 + " with scope: " + scope);
             return new UnificationResult( scope, term1, term2 );
         }
-        log.info("Unable to unify " + term1 + " and " + term2 + " with scope: " + scope);
+        log.fine("Unable to unify " + term1 + " and " + term2 + " with scope: " + scope);
         // did NOT unify
         return new UnificationResult();
     }

@@ -132,7 +132,7 @@ public class Repl
         if ( s instanceof Term )
         {
             Term question = (Term) s;
-            log.fine("we have term " + question);
+            log.finer("we have term " + question);
             // eval
             // todo add concept of repl functions and built in functions...
             if ( switchMode( question ) )
@@ -149,7 +149,7 @@ public class Repl
             }
             else if ( load(question) )
             {
-                log.fine("time to load a file...");
+                log.finer("time to load a file...");
                 List toAdds = loadFile(question);
                 for ( Object o : toAdds )
                 {
@@ -174,7 +174,7 @@ public class Repl
                 {
                     case ADD:
                         kb.fact( question );
-                        log.info("added fact " + question);
+                        log.fine("added fact " + question);
                         break;
                     case ASK:
                         return proofSearch.ask( question );
@@ -183,12 +183,12 @@ public class Repl
         }
         else if ( s instanceof Rule )
         {
-            log.fine("we have rule " + s);
+            log.finer("we have rule " + s);
             switch ( mode )
             {
                 case ADD:
                     kb.rule( (Rule) s );
-                    log.info("added rule: " + s);
+                    log.fine("added rule: " + s);
                     break;
                 case ASK:
                     return "You cannot specify rules in ASK mode.";
