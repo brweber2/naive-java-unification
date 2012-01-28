@@ -58,8 +58,8 @@ public class Repl
             catch ( Exception e )
             {
                 System.err.println( "Error: " + e.getMessage() );
+                e.printStackTrace();
                 System.err.flush();
-                System.out.flush();
             }
         }
     }
@@ -223,6 +223,7 @@ public class Repl
     private static void print( Object result )
     {
         System.out.println(result);
+        System.out.flush();
     }
 
     private static boolean done( String read )

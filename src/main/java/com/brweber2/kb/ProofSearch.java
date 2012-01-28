@@ -77,9 +77,11 @@ public class ProofSearch {
             while ( result.getNext() != null )
             {
                 System.out.println(result.toString());
+                System.out.flush();
                 result = result.getNext();
             }
         }
         System.out.println(result.getSuccess().name().toLowerCase());
+        System.out.flush();
     }
 }

@@ -80,6 +80,7 @@ public class UnificationResult {
     public void print()
     {
         System.out.println(toString());
+        System.out.flush();
     }
 
     public UnificationScope getUnifyScope() {
