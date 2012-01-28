@@ -4,7 +4,7 @@ package com.brweber2.term.rule;
  * @author brweber2
  * Copyright: 2012
  */
-public class RuleOr {
+public class RuleOr implements RuleBody {
     RuleBody left;
     RuleBody right;
 
