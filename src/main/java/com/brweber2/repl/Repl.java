@@ -129,6 +129,7 @@ public class Repl
     {
         // parse
         Object s = parseString( read );
+        // todo need to add some built in functions (dumping the kb, loading file into kb, dumping kb into file...etc)
         if ( s instanceof Term )
         {
             Term question = (Term) s;
