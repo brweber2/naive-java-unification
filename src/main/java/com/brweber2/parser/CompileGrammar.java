@@ -20,8 +20,8 @@ public class CompileGrammar
     
     public static void main( String[] args ) throws IOException
     {
-        File grammarFile = new File("/Users/bweber/brweber2/naive-java-unification/src/main/resources/naive_java_unification.egt");
-        File sourceFile = new File( "/Users/bweber/brweber2/naive-java-unification/src/main/resources/grammar/delete_me.txt" );
+        File grammarFile = new File("/Users/brweber2/code/unification/src/main/resources/naive_java_unification.egt");
+        File sourceFile = new File( "/Users/brweber2/code/unification/src/main/resources/grammar/delete_me.txt" );
 
         log.finest("" + grammarFile.exists());
         log.finest("" + sourceFile.exists());
@@ -40,7 +40,10 @@ public class CompileGrammar
             throw new RuntimeException( "Unable to parse the source file " + sourceFile.getAbsolutePath() );
         }
         parser.getCurrentReduction().execute();
-        log.fine(parser.getParseTree());
+        System.out.println(parser.getCurrentReduction());
+        System.out.println(parser.getCurrentReduction().getValue());
+        System.out.println(parser.getCurrentReduction().getValue().asObject());
+        System.out.println(parser.getParseTree());
     }
 
     public GOLDParser parser()

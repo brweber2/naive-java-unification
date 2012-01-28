@@ -6,7 +6,8 @@ A super naive unification library written in Java.  This is based on Chapters 1-
 * Variables are prefixed with '@' (i.e. @foo).
 
 ## In progress work (i.e. incomplete)
-* The parser is incomplete.  The grammar is written and the rule handlers are in place, but the terms are not generated yet. Hopefully this will be fixed shortly.
+* The parser is incomplete.  Rules are currently not parsing properly.
+* Loading terms and rules from files is not functioning currently.  They must be loaded via the repl.
 
 ## Work that hasn't started yet
 * There is no support for lists.
@@ -14,6 +15,7 @@ A super naive unification library written in Java.  This is based on Chapters 1-
 
 ## Work that will likely not be supported
 * There is not short circuiting of rules that will never terminate.
+* There is no support for operators.
 * There is no (and there is no plan to) support for input/output (Just use Java...).
 * There is no (and there is no plan to) support for cut.
 
